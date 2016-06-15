@@ -235,7 +235,7 @@ public final class Contact implements Comparable<Contact> {
   @Override
   public String toString() {
     return name + "\n" + phoneNumber.toString() + "\n" + email + "\n" +
-	    getPostalAddress() + "\n" + note + "\n";
+        getPostalAddress() + "\n" + note + "\n";
   }
   
   /**
@@ -260,17 +260,17 @@ public final class Contact implements Comparable<Contact> {
   }
   
   public String getName() {
-	/* String immutable. Don't need Defensive Copy */  
+    /* String immutable. Don't need Defensive Copy */  
     return name;
   }
   
   public String getEmail() {
-	/* Same as above */  
+    /* String immutable. Don't need Defensive Copy */ 
     return email;
   }
   
   public String getNote() {
-	/* Same as above */ 
+    /* String immutable. Don't need Defensive Copy */ 
     return note;	  
   }
   
@@ -282,7 +282,7 @@ public final class Contact implements Comparable<Contact> {
    */
   
   public String getPostalAddress() {
-	/* Same as above */   
+    /* String immutable. Don't need Defensive Copy */   
     return postalAddress.toString();
   }
   
@@ -331,8 +331,8 @@ public final class Contact implements Comparable<Contact> {
     
     @Override
     public String toString() { 
-	  return address;
-	}
+      return address;
+    }
     
   }
   
@@ -362,15 +362,15 @@ public final class Contact implements Comparable<Contact> {
       this.subscriberNumber = Integer.parseInt(parsedSubscriberNumber);
     }
 
-	private String buildNumber(String countryCode, String areaCode, 
-	    String subscriberNumber) {
-	  int length = countryCode.length() + areaCode.length() + subscriberNumber.length();
-	  StringBuilder numberBuilder = new StringBuilder(length);
-	  numberBuilder.append(countryCode);
-	  numberBuilder.append(areaCode);
-	  numberBuilder.append(subscriberNumber);
-	  return numberBuilder.toString();
-	}
+    private String buildNumber(String countryCode, String areaCode, 
+        String subscriberNumber) {
+      int length = countryCode.length() + areaCode.length() + subscriberNumber.length();
+      StringBuilder numberBuilder = new StringBuilder(length);
+      numberBuilder.append(countryCode);
+      numberBuilder.append(areaCode);
+      numberBuilder.append(subscriberNumber);
+      return numberBuilder.toString();
+    }
 	
 	/**
 	 * Returns the Contact's phone number, excluding any non-digit characters or 
@@ -378,9 +378,9 @@ public final class Contact implements Comparable<Contact> {
 	 * @return the Contact's phone number without additional characters
 	 */
 	
-	String getNumber() {
-	  return phoneNumber;	
-	}
+    String getNumber() {
+      return phoneNumber;	
+    }
 	
 	/**
 	 * Returns the Contact's phone number. The phone number is represented by 
@@ -391,10 +391,10 @@ public final class Contact implements Comparable<Contact> {
 	 * @return the Contact's phone number with spaces between fields.
 	 */
 
-	@Override
-	public String toString() {
-	  return countryCode + " " + areaCode + " " + subscriberNumber;
-	}
+    @Override
+    public String toString() {
+      return countryCode + " " + areaCode + " " + subscriberNumber;
+    }
   }
   
   /**

@@ -62,11 +62,11 @@ public class AddressBook {
     //insert contact into AddressBook
     int index = getContactListInsertionIndex(contactsList, contact);
     if (index == -1) {
-	  //Contact already exists in addressBook	
-	  return false;	
+      //Contact already exists in addressBook	
+      return false;	
     } else {
-	  contactsList.add(index, contact);
-	  return true;
+      contactsList.add(index, contact);
+      return true;
     }
   }
   
@@ -165,7 +165,7 @@ public class AddressBook {
         return -1;	  
       }
       if(contact.compareTo(localContacts.get(i)) < 0) {
-	    return i;	  
+        return i;	  
       }
     }
     return localContacts.size();
@@ -185,9 +185,9 @@ public class AddressBook {
    */
   
   public boolean removeContact(Contact contact) {
-	if (contact == null) {
-	  return false;	
-	}  
+    if (contact == null) {
+      return false;	
+    }  
     for (int i = 0; i < contactsList.size(); ++i) {
       if (contact.equals(contactsList.get(i))) {
         contactsList.remove(i);
@@ -292,8 +292,8 @@ public class AddressBook {
     	    addressTokens[4], addressTokens[5]).emailAddress(email).note(note).build();   
       } else {
         contact = new Contact.Builder(name, "1", "000", "0000000")
-  	        .postalAddress("number", "street", "city", "state",
-  	        "zipcode","country").emailAddress(email).note(note).build();  
+            .postalAddress("number", "street", "city", "state",
+            "zipcode","country").emailAddress(email).note(note).build();  
       }
     	  
       addContact(contact); 
@@ -310,8 +310,8 @@ public class AddressBook {
   
   @Override
   public String toString() {
-	if (contactsList.isEmpty()) {
-	  return "";	
+    if (contactsList.isEmpty()) {
+      return "";	
 	}
     Contact first = contactsList.get(0);  
     int initialSize = (first.getName().length() + first.getEmail().length() + first.getPhoneNumber().length()
