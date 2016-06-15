@@ -34,7 +34,7 @@ import java.io.FileNotFoundException;
  */
 
 public class AddressBook {
-  private ArrayList<Contact> contactsList;
+  private List<Contact> contactsList;
   
   public AddressBook() { 
     this.contactsList = new ArrayList<Contact>();
@@ -85,8 +85,8 @@ public class AddressBook {
    * @return a list of contacts who match the search
    */
   
-  public ArrayList<Contact> searchContactsList(String searchString) {
-    ArrayList<Contact> matchingContacts = new ArrayList<Contact>();
+  public List<Contact> searchContactsList(String searchString) {
+    List<Contact> matchingContacts = new ArrayList<Contact>();
     if (searchString.isEmpty() || searchString == null) {
       return matchingContacts;	
     }
@@ -134,7 +134,7 @@ public class AddressBook {
    * @param contact contact to be added to the list of matching contacts.
    */
   
-  private void addContactToMatchingContacts(ArrayList<Contact> matchingContacts,
+  private void addContactToMatchingContacts(List<Contact> matchingContacts,
       Contact contact) {
 	int index = getContactListInsertionIndex(matchingContacts, contact);
 	matchingContacts.add(index, contact);	  
@@ -154,7 +154,7 @@ public class AddressBook {
    * if contact already exists in the list.
    */
   
-  private int getContactListInsertionIndex(ArrayList<Contact> localContacts,
+  private int getContactListInsertionIndex(List<Contact> localContacts,
       Contact contact) {
     for(int i = 0; i < localContacts.size(); ++i){
       if (contact.equals(localContacts.get(i))) {
@@ -252,7 +252,7 @@ public class AddressBook {
   
   public void readAddressBookFromFile(String filePath) throws IOException, ParseException,
       FileNotFoundException {
-	JSONParser parser = new JSONParser();
+    JSONParser parser = new JSONParser();
 	Object obj = parser.parse(new FileReader(filePath));
     JSONObject contacts = (JSONObject) obj;
     JSONArray contactsArray = (JSONArray) contacts.get("Contacts List");
