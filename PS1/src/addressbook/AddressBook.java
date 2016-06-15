@@ -29,6 +29,8 @@ import java.io.FileNotFoundException;
  * {@code Contact} objects are immutable. Therefore, Contacts in the Address Book cannot be 
  * directly modified. In order to update a Contact, you must remove the Contact from the Address Book
  * using one of the provided methods and subsequently add a new Contact.
+ * <p>
+ * Methods in the {@code AddressBook} class are not thread-safe.
  * @author Eric
  *
  */
@@ -46,6 +48,8 @@ public class AddressBook {
    * If the Contact already exists in the Address Book the method will return false.
    * When the Contact is successfully added he/she/it will be inserted in the Address Book's
    * {@code ArrayList} in sorted order by the Contact's name.  
+   * <p>
+   * {@code addContact} is not thread-safe.
    * @param contact the {@code Contact} object to be added to the Address Book.
    * @return true if the contact is successfully added; false otherwise.
    */
@@ -173,6 +177,8 @@ public class AddressBook {
    * If contact is null, the method will return false.
    * <p>
    * This is one of two methods provided to remove a contact.
+   * <p>
+   * {@code removeContact} is not thread-safe.
    * @param contact
    * @return true if the contact is successfully removed; false otherwise.
    * @see removeContact
@@ -197,6 +203,8 @@ public class AddressBook {
    * If the Address Book is empty the method will return null.
    * <p>
    * This is one of two methods provided to remove a contact.
+   * <p>
+   * {@code removeContactAtIndex} is not thread-safe.
    * @param index index in {@code ArrayList} where contact is to be removed.
    * @return the contact that was removed. null if the {@code ArrayList} is empty.
    */
@@ -214,6 +222,7 @@ public class AddressBook {
    * Saves the list of contacts in Address Book to a file.
    * <p>
    * Uses JSON format to store the list of contacts.
+   * {@code saveAddressBookToFile} is not thread-safe.
    * @param filePath the absolute path where the list of contacts are to be saved.
    * @throws IOException if the method fails to save the file for any reason.
    * @throws FileNotFoundException if the specified pathname does not exist.
@@ -225,7 +234,6 @@ public class AddressBook {
     JSONObject contacts = new JSONObject();
     for (Contact c: contactsList) {	
       HashMap<String,String> contact = new JSONObject();
-      //Warning is unavoidable.
       contact.put("name", c.getName());
       //can create both phone number representations from this version
       contact.put("number", c.getPhoneNumber());
@@ -244,6 +252,7 @@ public class AddressBook {
   
   /**
    * Reads an Address Book of contacts from the provided file.
+   * {@code readAddressBookFromFile} is not thread-safe.
    * @param filePath the absolute path where the list of contacts are to be read.
    * @throws IOException if the method fails to read the file for any reason.
    * @throws ParseException if the method fails to parse the data in the file.
@@ -301,6 +310,9 @@ public class AddressBook {
   
   @Override
   public String toString() {
+	if (contactsList.isEmpty()) {
+	  return "";	
+	}
     Contact first = contactsList.get(0);  
     int initialSize = (first.getName().length() + first.getEmail().length() + first.getPhoneNumber().length()
 	    + first.getNote().length() + first.getPostalAddress().length())*contactsList.size();  
