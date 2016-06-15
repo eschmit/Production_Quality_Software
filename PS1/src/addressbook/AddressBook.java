@@ -51,19 +51,19 @@ public class AddressBook {
    */
 	
   public boolean addContact(Contact contact) { 
-	/*Contact is immutable. Don't need to use Defensive Copy */
-	if (contact == null) {
+    /*Contact is immutable. Don't need to use Defensive Copy */
+    if (contact == null) {
 	  return false;	
 	}
-	//insert contact into AddressBook
-	int index = getContactListInsertionIndex(contactsList, contact);
-	if (index == -1) {
+    //insert contact into AddressBook
+    int index = getContactListInsertionIndex(contactsList, contact);
+    if (index == -1) {
 	  //Contact already exists in addressBook	
 	  return false;	
-	} else {
+    } else {
 	  contactsList.add(index, contact);
 	  return true;
-	}
+    }
   }
   
   /**
@@ -136,8 +136,8 @@ public class AddressBook {
   
   private void addContactToMatchingContacts(List<Contact> matchingContacts,
       Contact contact) {
-	int index = getContactListInsertionIndex(matchingContacts, contact);
-	matchingContacts.add(index, contact);	  
+    int index = getContactListInsertionIndex(matchingContacts, contact);
+    matchingContacts.add(index, contact);	  
   }
   
   /**
@@ -160,9 +160,9 @@ public class AddressBook {
       if (contact.equals(localContacts.get(i))) {
         return -1;	  
       }
-	  if(contact.compareTo(localContacts.get(i)) < 0) {
+      if(contact.compareTo(localContacts.get(i)) < 0) {
 	    return i;	  
-	  }
+      }
     }
     return localContacts.size();
   }
@@ -202,12 +202,12 @@ public class AddressBook {
    */
   
   public Contact removeContactAtIndex(int index) {
-	if (contactsList.isEmpty()) {
-	  return null;	
-	}
-	Contact removedContact = contactsList.get(index);
-	contactsList.remove(index);
-	return removedContact;
+    if (contactsList.isEmpty()) {
+      return null;	
+    }
+    Contact removedContact = contactsList.get(index);
+    contactsList.remove(index);
+    return removedContact;
   }
   
   /**
@@ -221,9 +221,9 @@ public class AddressBook {
   
   public void saveAddressBookToFile(String filePath) throws IOException, 
       FileNotFoundException {
-	List<HashMap<String,String>> contactsArray = new JSONArray();
-	JSONObject contacts = new JSONObject();
-	for (Contact c: contactsList) {	
+    List<HashMap<String,String>> contactsArray = new JSONArray();
+    JSONObject contacts = new JSONObject();
+    for (Contact c: contactsList) {	
       HashMap<String,String> contact = new JSONObject();
       //Warning is unavoidable.
       contact.put("name", c.getName());
@@ -233,13 +233,13 @@ public class AddressBook {
       contact.put("address", c.getPostalAddress());
       contact.put("note", c.getNote());
       contactsArray.add(contact);
-	}
-	contacts.put("Contacts List", contactsArray);
+    }
+    contacts.put("Contacts List", contactsArray);
 	
-	FileWriter file = new FileWriter(filePath);
-	file.write(contacts.toJSONString());
-	file.flush();
-	file.close();
+    FileWriter file = new FileWriter(filePath);
+    file.write(contacts.toJSONString());
+    file.flush();
+    file.close();
   }
   
   /**
@@ -253,7 +253,7 @@ public class AddressBook {
   public void readAddressBookFromFile(String filePath) throws IOException, ParseException,
       FileNotFoundException {
     JSONParser parser = new JSONParser();
-	Object obj = parser.parse(new FileReader(filePath));
+    Object obj = parser.parse(new FileReader(filePath));
     JSONObject contacts = (JSONObject) obj;
     JSONArray contactsArray = (JSONArray) contacts.get("Contacts List");
     Iterator<?> iterator = contactsArray.iterator();
@@ -301,14 +301,14 @@ public class AddressBook {
   
   @Override
   public String toString() {
-	Contact first = contactsList.get(0);  
-	int initialSize = (first.getName().length() + first.getEmail().length() + first.getPhoneNumber().length()
+    Contact first = contactsList.get(0);  
+    int initialSize = (first.getName().length() + first.getEmail().length() + first.getPhoneNumber().length()
 	    + first.getNote().length() + first.getPostalAddress().length())*contactsList.size();  
-	StringBuilder contacts = new StringBuilder(initialSize);
-	for (Contact contact: contactsList) {
+    StringBuilder contacts = new StringBuilder(initialSize);
+    for (Contact contact: contactsList) {
 	  contacts.append(contact.toString());
 	}
-	return contacts.toString();
+    return contacts.toString();
   }
   
   /**

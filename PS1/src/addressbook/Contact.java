@@ -65,10 +65,10 @@ public final class Contact implements Comparable<Contact> {
       this.name = ((name == null) ? "" : name);
       this.countryCode = ((countryCode == null || countryCode == "" || 
     	  stringIsWhiteSpace(countryCode)) ? "1" : countryCode);
-	  this.areaCode = ((areaCode == null || areaCode == "" || 
-		  stringIsWhiteSpace(areaCode)) ? "000" : areaCode);
-	  this.subscriberNumber = ((subscriberNumber == null || subscriberNumber == "" || 
-		  stringIsWhiteSpace(subscriberNumber)) ? "0000000" : subscriberNumber);
+      this.areaCode = ((areaCode == null || areaCode == "" || 
+	      stringIsWhiteSpace(areaCode)) ? "000" : areaCode);
+      this.subscriberNumber = ((subscriberNumber == null || subscriberNumber == "" || 
+	      stringIsWhiteSpace(subscriberNumber)) ? "0000000" : subscriberNumber);
     
     }
     
@@ -113,17 +113,17 @@ public final class Contact implements Comparable<Contact> {
     public Builder postalAddress(String number, String street, String city,
         String state, String zipcode, String country) {
       this.number = ((number == null || number == "" || 
-    		  stringIsWhiteSpace(number)) ? "number" : number);
+          stringIsWhiteSpace(number)) ? "number" : number);
       this.street = ((street == null || street == "" || 
-    		  stringIsWhiteSpace(street)) ? "street" : street);
+          stringIsWhiteSpace(street)) ? "street" : street);
       this.city = ((city == null || city == "" || 
-    		  stringIsWhiteSpace(city)) ? "city" : city);
+          stringIsWhiteSpace(city)) ? "city" : city);
       this.state = ((state == null || state == "" || 
-    		  stringIsWhiteSpace(state)) ? "state" : state);
+          stringIsWhiteSpace(state)) ? "state" : state);
       this.zipcode = ((zipcode == null || zipcode == "" || 
-    		  stringIsWhiteSpace(zipcode)) ? "zipcode" : zipcode);
+          stringIsWhiteSpace(zipcode)) ? "zipcode" : zipcode);
       this.country = ((country == null || country == "" || 
-    		  stringIsWhiteSpace(country)) ? "country" : country);
+          stringIsWhiteSpace(country)) ? "country" : country);
       return this;
     }
     
@@ -234,7 +234,7 @@ public final class Contact implements Comparable<Contact> {
 	
   @Override
   public String toString() {
-	return name + "\n" + phoneNumber.toString() + "\n" + email + "\n" +
+    return name + "\n" + phoneNumber.toString() + "\n" + email + "\n" +
 	    getPostalAddress() + "\n" + note + "\n";
   }
   
@@ -309,17 +309,17 @@ public final class Contact implements Comparable<Contact> {
       int spaces = 6;
       int length = number.length() + street.length() + city.length() + state.length()
           + zipcode.length() + country.length() + spaces;
-  	  StringBuilder addressBuilder = new StringBuilder(length);
-  	  addressBuilder.append(number);
-  	  addressBuilder.append(" ");
-  	  addressBuilder.append(street);
-  	  addressBuilder.append(" ");
-  	  addressBuilder.append(city);
-  	  addressBuilder.append(" ");
-  	  addressBuilder.append(state);
-  	  addressBuilder.append(" ");
-  	  addressBuilder.append(country);
-  	  return addressBuilder.toString();
+      StringBuilder addressBuilder = new StringBuilder(length);
+      addressBuilder.append(number);
+      addressBuilder.append(" ");
+      addressBuilder.append(street);
+      addressBuilder.append(" ");
+      addressBuilder.append(city);
+      addressBuilder.append(" ");
+      addressBuilder.append(state);
+      addressBuilder.append(" ");
+      addressBuilder.append(country);
+      return addressBuilder.toString();
     }
     
     /**
@@ -330,7 +330,7 @@ public final class Contact implements Comparable<Contact> {
      */
     
     @Override
-	public String toString() { 
+    public String toString() { 
 	  return address;
 	}
     
@@ -347,20 +347,20 @@ public final class Contact implements Comparable<Contact> {
    */
   
   private static class PhoneNumber {
-	private short countryCode; 
-	private short areaCode;
-	private int subscriberNumber; 
-	private String phoneNumber;
+    private short countryCode; 
+    private short areaCode;
+    private int subscriberNumber; 
+    private String phoneNumber;
    
-	private PhoneNumber(String countryCode, String areaCode, String subscriberNumber) {
-	  String parsedCountryCode = parseStringToNumberString(countryCode);
-	  String parsedAreaCode = parseStringToNumberString(areaCode);
-	  String parsedSubscriberNumber = parseStringToNumberString(subscriberNumber);
-	  phoneNumber = buildNumber(parsedCountryCode, parsedAreaCode, parsedSubscriberNumber);
-	  this.countryCode = Short.valueOf(parsedCountryCode);
-	  this.areaCode = Short.valueOf(parsedAreaCode);
-	  this.subscriberNumber = Integer.parseInt(parsedSubscriberNumber);
-	}
+    private PhoneNumber(String countryCode, String areaCode, String subscriberNumber) {
+      String parsedCountryCode = parseStringToNumberString(countryCode);
+      String parsedAreaCode = parseStringToNumberString(areaCode);
+      String parsedSubscriberNumber = parseStringToNumberString(subscriberNumber);
+      phoneNumber = buildNumber(parsedCountryCode, parsedAreaCode, parsedSubscriberNumber);
+      this.countryCode = Short.valueOf(parsedCountryCode);
+      this.areaCode = Short.valueOf(parsedAreaCode);
+      this.subscriberNumber = Integer.parseInt(parsedSubscriberNumber);
+    }
 
 	private String buildNumber(String countryCode, String areaCode, 
 	    String subscriberNumber) {
@@ -416,13 +416,13 @@ public final class Contact implements Comparable<Contact> {
    */
   
   static String parseStringToNumberString(String string) {
-	  StringBuilder stringBuilder = new StringBuilder();
-	  for (char c: string.toCharArray()) {
-	    if (isOperand(c)) {
-		  stringBuilder.append(c);
-		}
-	  }
-	  return stringBuilder.toString();
-	}
+    StringBuilder stringBuilder = new StringBuilder();
+    for (char c: string.toCharArray()) {
+      if (isOperand(c)) {
+        stringBuilder.append(c);
+      }
+    }
+    return stringBuilder.toString();
+  }
   
 }
