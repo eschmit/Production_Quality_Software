@@ -58,7 +58,7 @@ public class AddressBook {
   public boolean addContact(Contact contact) { 
     /*Contact is immutable. Don't need to use Defensive Copy */
     if (contact == null) {
-	  return false;	
+      return false;	
     }
     //insert contact into AddressBook
     int index = getContactListInsertionIndex(contactsList, contact);
