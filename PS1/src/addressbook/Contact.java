@@ -141,6 +141,74 @@ public final class Contact implements Comparable<Contact> {
     }
     
     /**
+     * Convenience Builder provided for "modifying" a contact. Builder copies
+     * current Contact fields to a new Contact object. Use in conjunction with 
+     * {@code withEmail}, {@code withPostalAddress} and {@code withNote} to modify
+     * non-final fields.
+     * @param contact the Contact object to be modified
+     */
+    
+    public Builder(Contact contact) {
+      this.name = contact.getName();
+      String delims = "[ ]+";
+      String[] numberTokens = contact.getPhoneNumber().split(delims);
+      if (numberTokens.length == 3) {
+        this.countryCode = numberTokens[0];
+        this.areaCode = numberTokens[1];
+        this.subscriberNumber = numberTokens[2];
+      } else {
+        this.countryCode = "1";
+        this.areaCode = "000";
+        this.subscriberNumber = "0000000";
+      }
+      this.email = contact.getEmail();
+      this.note = contact.getNote();
+    }
+    
+    /**
+     * Used in conjunction with {@code Builder(Contact contact)} to modify a 
+     * contact's email address.
+     * @param email email address to be added to Contact
+     * @return the Builder object used to create the contact
+     */
+    
+    public Builder withEmail(String email) { 
+      this.email = ((email == null || stringIsWhiteSpace(email))
+          ? "" : email);
+      return this;  
+    }
+    
+    /**
+     * Used in conjunction with {@code Builder(Contact contact)} to modify a 
+     * contact's phone number.
+     * @param number the building number
+     * @param street the street name including direction (e.g. East), and apartment/suite/etc.
+     * @param city the name of the city
+     * @param state the name of the state 
+     * @param zipcode the applicable zipcode with or without optional digits
+     * @param country the name of the country
+     * @return the Builder object used to create the contact
+     */
+    
+    public Builder withPostalAddress(String number, String street, String city,
+        String state, String zipcode, String country) {
+      return postalAddress(number, street, city, state, zipcode, country);  
+    }
+    
+    /**
+     * Used in conjunction with {@code Builder(Contact contact)} to modify a 
+     * note about a contact.
+     * @param note any note about the contact
+     * @return the Builder object used to create the contact
+     */
+    
+    public Builder withNote(String note) { 
+      this.note = ((note == null || stringIsWhiteSpace(note))
+          ? "" : note);
+      return this;  
+    }
+    
+    /**
      * Required method when using the Builder class to create a Contact object.
      * This method is called after the Builder method and any optional methods called.
      * @return the Contact object to be created.

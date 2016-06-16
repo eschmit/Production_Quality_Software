@@ -28,10 +28,11 @@ import java.io.FileNotFoundException;
  * book, saving the address book to a file and reading the address book from a file. 
  * <p>
  * {@code Contact} objects are immutable. Therefore, Contacts in the Address Book cannot be 
- * directly modified. In order to update a Contact, you must remove the Contact from the Address Book
- * using one of the provided methods and subsequently add a new Contact.
+ * directly modified. In order to update a Contact, pass the Contact to the 
+ * {@code Builder(Contact contact)} method.
  * <p>
  * Methods in the {@code AddressBook} class are not thread-safe.
+ * @see Contact
  * @author Eric
  *
  */
