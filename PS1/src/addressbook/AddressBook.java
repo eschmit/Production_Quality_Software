@@ -14,12 +14,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
+
 /**
  * The {@code AddressBook} class represents an address book that contains a sorted list of 
  * {@code Contact} objects, sorted by a Contact's name.
  * <p>
  * {@code AddressBook} uses an {@code ArrayList} to store the list of Contacts.
- * The {@code ArrayList} cannot be directly accessed by a copy can be retrieved. 
+ * The {@code ArrayList} cannot be directly accessed but an unmodifiable view can be retrieved. 
  * <p>
  * The class {@code AddressBook} includes methods for adding a Contact to the address book,
  * removing a Contact from the address book, either by passing an index or the Contact object
@@ -58,7 +59,7 @@ public class AddressBook {
     /*Contact is immutable. Don't need to use Defensive Copy */
     if (contact == null) {
 	  return false;	
-	}
+    }
     //insert contact into AddressBook
     int index = getContactListInsertionIndex(contactsList, contact);
     if (index == -1) {
@@ -276,24 +277,24 @@ public class AddressBook {
       String delims = "[ ]+";
       String[] numberTokens = phoneNumber.split(delims);
       String[] addressTokens = address.split(delims);
-    	
+      int addressLength = 6;
+      int numberLength = 3;
+      
       Contact contact;
-      if (numberTokens.length == 3 && addressTokens.length == 6) {
+      if (numberTokens.length == numberLength && addressTokens.length == addressLength) {
         contact = new Contact.Builder(name, numberTokens[0], numberTokens[1], numberTokens[2])
     	    .postalAddress(addressTokens[0], addressTokens[1], addressTokens[2], addressTokens[3],
     	    addressTokens[4], addressTokens[5]).emailAddress(email).note(note).build();  
-      } else if (numberTokens.length == 3) {
+      } else if (numberTokens.length == numberLength) {
         contact = new Contact.Builder(name, numberTokens[0], numberTokens[1], numberTokens[2])
-    	    .postalAddress("number", "street", "city", "state",
-    	    "zipcode","country").emailAddress(email).note(note).build();  
-      } else if (addressTokens.length == 5) {
+            .emailAddress(email).note(note).build();  
+      } else if (addressTokens.length == addressLength) {
         contact = new Contact.Builder(name, "1", "000", "0000000")
     	    .postalAddress(addressTokens[0], addressTokens[1], addressTokens[2], addressTokens[3],
     	    addressTokens[4], addressTokens[5]).emailAddress(email).note(note).build();   
       } else {
         contact = new Contact.Builder(name, "1", "000", "0000000")
-            .postalAddress("number", "street", "city", "state",
-            "zipcode","country").emailAddress(email).note(note).build();  
+            .emailAddress(email).note(note).build();  
       }	  
       addContact(contact); 
     }

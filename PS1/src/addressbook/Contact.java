@@ -44,14 +44,14 @@ public final class Contact implements Comparable<Contact> {
     private final String subscriberNumber;
 			
     //Optional parameters - initialized to default values. Non-final
-    private String email = "email"; 
-    private String number = "number";
-    private String street = "street";
-    private String city = "city";
-    private String state = "state";
-    private String zipcode = "zipcode";
-    private String country = "country";
-    private String note = "note";
+    private String email = ""; 
+    private String number = "";
+    private String street = "";
+    private String city = "";
+    private String state = "";
+    private String zipcode = "";
+    private String country = "";
+    private String note = "";
     
     /** 
      * Required method when using the Builder class to create a Contact object.
@@ -70,10 +70,9 @@ public final class Contact implements Comparable<Contact> {
       this.countryCode = ((countryCode == null || countryCode == "" || 
     	  stringIsWhiteSpace(countryCode)) ? "1" : countryCode);
       this.areaCode = ((areaCode == null || areaCode == "" || 
-	      stringIsWhiteSpace(areaCode)) ? "000" : areaCode);
+          stringIsWhiteSpace(areaCode)) ? "000" : areaCode);
       this.subscriberNumber = ((subscriberNumber == null || subscriberNumber == "" || 
-	      stringIsWhiteSpace(subscriberNumber)) ? "0000000" : subscriberNumber);
-    
+          stringIsWhiteSpace(subscriberNumber)) ? "0000000" : subscriberNumber);
     }
     
     private boolean stringIsWhiteSpace(String stringToCheck) {
@@ -93,17 +92,14 @@ public final class Contact implements Comparable<Contact> {
      */
     
     public Builder emailAddress(String email) { 
-      this.email = ((email == null || email == "" || stringIsWhiteSpace(email))
-          ? "email" : email);
+      this.email = ((email == null || stringIsWhiteSpace(email))
+          ? "" : email);
       return this;  
     }
     
     /**
      * Optional method for creating a Contact object. If method not called, or parameter passed
-     * is null, empty or blank String, the number field will be set to "number", 
-     * the street field will be set to "street", the city field will be set
-     * to "city", the state field will be set to "state", the zipcode field will be set to "zipcode", 
-     * and the country field.
+     * is null, empty or blank String, the applicable field will be set to an empty string. 
      * @param number the building number
      * @param street the street name including direction (e.g. East), and apartment/suite/etc.
      * @param city the name of the city
@@ -113,21 +109,20 @@ public final class Contact implements Comparable<Contact> {
      * @return the Builder object used to create the contact
      */
     
-    
     public Builder postalAddress(String number, String street, String city,
         String state, String zipcode, String country) {
-      this.number = ((number == null || number == "" || 
-          stringIsWhiteSpace(number)) ? "number" : number);
-      this.street = ((street == null || street == "" || 
-          stringIsWhiteSpace(street)) ? "street" : street);
-      this.city = ((city == null || city == "" || 
-          stringIsWhiteSpace(city)) ? "city" : city);
-      this.state = ((state == null || state == "" || 
-          stringIsWhiteSpace(state)) ? "state" : state);
-      this.zipcode = ((zipcode == null || zipcode == "" || 
-          stringIsWhiteSpace(zipcode)) ? "zipcode" : zipcode);
-      this.country = ((country == null || country == "" || 
-          stringIsWhiteSpace(country)) ? "country" : country);
+      this.number = ((number == null || 
+          stringIsWhiteSpace(number)) ? "" : number);
+      this.street = ((street == null || 
+          stringIsWhiteSpace(street)) ? "" : street);
+      this.city = ((city == null || 
+          stringIsWhiteSpace(city)) ? "" : city);
+      this.state = ((state == null || 
+          stringIsWhiteSpace(state)) ? "" : state);
+      this.zipcode = ((zipcode == null || 
+          stringIsWhiteSpace(zipcode)) ? "" : zipcode);
+      this.country = ((country == null || 
+          stringIsWhiteSpace(country)) ? "" : country);
       return this;
     }
     
@@ -140,8 +135,8 @@ public final class Contact implements Comparable<Contact> {
      */
     
     public Builder note(String note) {
-      this.note = ((note == null || note == "" || stringIsWhiteSpace(note))
-    	  ? "note" : note);
+      this.note = ((note == null || stringIsWhiteSpace(note))
+    	  ? "" : note);
       return this;    	
     }
     
@@ -179,7 +174,7 @@ public final class Contact implements Comparable<Contact> {
 		
   @Override
   public int compareTo(Contact contact) {
-	//Don't ignore case when ordering
+    //Don't ignore case when ordering
     return name.compareTo(contact.name);			
   }
   
@@ -220,11 +215,13 @@ public final class Contact implements Comparable<Contact> {
     int result = hashCode;
     if (result == 0) {
       result = 17;
-      result = 31 * result + Integer.parseInt(name);
-      result = 31 * result + Integer.parseInt(email);
-      result = 31 * result + Integer.parseInt(phoneNumber.getNumber());
-      result = 31 * result + Integer.parseInt(getPostalAddress());
-      result = 31 * result + Integer.parseInt(note);
+      result = ((name.isEmpty()) ? result : 31 * result + Integer.parseInt(name));
+      result = ((email.isEmpty()) ? result : 31 * result + Integer.parseInt(email));
+      String number = phoneNumber.getNumber();
+      result = ((number.isEmpty()) ? result : 31 * result + Integer.parseInt(number));
+      String address = getPostalAddress();
+      result = ((address.isEmpty()) ? result : 31 * result + Integer.parseInt(address));
+      result = ((note.isEmpty()) ? result : 31 * result + Integer.parseInt(note));
       hashCode = result;
     }
     return result;
@@ -310,7 +307,7 @@ public final class Contact implements Comparable<Contact> {
     
     private String buildAddress(String number, String street, String city,
         String state, String zipcode, String country) {
-      int spaces = 6;
+      int spaces = 4;
       int length = number.length() + street.length() + city.length() + state.length()
           + zipcode.length() + country.length() + spaces;
       StringBuilder addressBuilder = new StringBuilder(length);
