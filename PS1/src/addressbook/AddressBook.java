@@ -294,8 +294,7 @@ public class AddressBook {
         contact = new Contact.Builder(name, "1", "000", "0000000")
             .postalAddress("number", "street", "city", "state",
             "zipcode","country").emailAddress(email).note(note).build();  
-      }
-    	  
+      }	  
       addContact(contact); 
     }
         
@@ -312,22 +311,24 @@ public class AddressBook {
   public String toString() {
     if (contactsList.isEmpty()) {
       return "";	
-	}
+    }
     Contact first = contactsList.get(0);  
     int initialSize = (first.getName().length() + first.getEmail().length() + first.getPhoneNumber().length()
 	    + first.getNote().length() + first.getPostalAddress().length())*contactsList.size();  
     StringBuilder contacts = new StringBuilder(initialSize);
     for (Contact contact: contactsList) {
-	  contacts.append(contact.toString());
-	}
+      contacts.append(contact.toString());
+    }
     return contacts.toString();
   }
   
   /**
-   * Accessor method to get a list of the current contacts in the Address Book.
+   * Accessor method to get an unmodifiable list of the current contacts in the Address Book.
    * <p>
-   * The returned list is an immutable copy of the internal {@code ArrayList} that
+   * The returned list is an immutable view of the internal {@code ArrayList} that
    * contains the Address Book contacts. 
+   * Attempting to modify the view that is returned will throw an 
+   * UnsupportedOperationException.
    * <p>
    * In order to modify the internal {@code ArrayList} use {@code addContact} and
    * {@code removeContact} or {@code removeContactAtIndex}.
@@ -335,7 +336,7 @@ public class AddressBook {
    */
   
   public final List<Contact> getUnmodifiableContactsList() {
-	/*Using Defensive Copy */  
+    /*Return unmodifiable view */  
     return Collections.unmodifiableList(contactsList);
   }
   

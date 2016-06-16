@@ -7,6 +7,10 @@ package addressbook;
  * Objects of this class are inherently thread-safe.
  * <p>
  * {@code Contact} objects are the building block for the {@code AddressBook} class.
+ * However, {@code Contact} objects are also available to be used independently of the 
+ * {@code AddressBook} class. 
+ * <p>
+ * The {@code Contact} class is final and is not available to be sub-classed.
  * <p>
  * The class {@code Contact} includes methods for determining equality, comparing two Contact
  * objects, and returning Contact properties, including name, email, phone number, postal address,
@@ -372,24 +376,24 @@ public final class Contact implements Comparable<Contact> {
       return numberBuilder.toString();
     }
 	
-	/**
-	 * Returns the Contact's phone number, excluding any non-digit characters or 
-	 * empty spaces. This method is used internally for comparing two phone numbers
-	 * @return the Contact's phone number without additional characters
-	 */
+    /**
+     * Returns the Contact's phone number, excluding any non-digit characters or 
+     * empty spaces. This method is used internally for comparing two phone numbers
+     * @return the Contact's phone number without additional characters
+     */
 	
     String getNumber() {
       return phoneNumber;	
     }
 	
-	/**
-	 * Returns the Contact's phone number. The phone number is represented by 
-	 * three fields: country code, area code, and subscriber number. 
-	 * The fields are separated by a single space.
-	 * This representation of phone number is alternatively used for external and
-	 * long term storage purposes.
-	 * @return the Contact's phone number with spaces between fields.
-	 */
+    /**
+     * Returns the Contact's phone number. The phone number is represented by 
+     * three fields: country code, area code, and subscriber number. 
+     * The fields are separated by a single space.
+     * This representation of phone number is alternatively used for external and
+     * long term storage purposes.
+     * @return the Contact's phone number with spaces between fields.
+     */
 
     @Override
     public String toString() {
