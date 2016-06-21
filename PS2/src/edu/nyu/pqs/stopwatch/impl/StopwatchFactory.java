@@ -45,11 +45,11 @@ public class StopwatchFactory {
   }
   
   private static boolean uniqueId(String idToCheck) {
-    synchronized(stopwatchesLock) {
-      for (Stopwatch stopwatch: stopwatches) {
-        if (idToCheck.equals(stopwatch.getId())) {
-          return false;	
-        }
+    /* Get view of list to limit time in lock */   
+    List<Stopwatch> viewOfList = getStopwatches();
+    for (Stopwatch stopwatch: viewOfList) {
+      if (idToCheck.equals(stopwatch.getId())) {
+        return false;	
       }
     }
     return true;
@@ -68,21 +68,23 @@ public class StopwatchFactory {
     if(stopwatch == null){
       throw new IllegalArgumentException("stopwatch cannot be null.");
     }
+    /* Get view of list to limit time in lock */   
+    List<Stopwatch> viewOfList = getStopwatches();
     int indexOfElement = -1;
-    synchronized(stopwatchesLock) {
-      for (int i = 0; i < stopwatches.size(); i++) {
-        if (stopwatch.equals(stopwatches.get(i))) {
-          indexOfElement = i;
-          break;
-        }
+    for (int i = 0; i < viewOfList.size(); i++) {
+      if (stopwatch.equals(viewOfList.get(i))) {
+        indexOfElement = i;
+        break;
       }
-      /* stopwatch not in list. */
-      if (indexOfElement == -1) {
-        return false;
-      } else {
+    }
+    /* stopwatch not in list. */
+    if (indexOfElement == -1) {
+      return false;
+    } else {
+      synchronized(stopwatchesLock) {
         stopwatches.remove(indexOfElement);
-        return true;
       }
+      return true;
     }
   }
   
@@ -97,17 +99,6 @@ public class StopwatchFactory {
     synchronized(stopwatchesLock) {
       return Collections.unmodifiableList(stopwatches);
     }
-  }
-  
-  @Override
-  public String toString() {
-    StringBuilder stopwatchesBuilder = new StringBuilder();
-    synchronized(stopwatchesLock) {
-      for (Stopwatch stopwatch: stopwatches) {
-        stopwatchesBuilder.append(stopwatch.toString());  
-      }
-    }
-    return stopwatchesBuilder.toString();
   }
   
   /**
@@ -284,6 +275,23 @@ public class StopwatchFactory {
     }
     
     /**
+     * Used for internal retrieval of lapTimes list in order to 
+     * limit time spent in lock and avoid making a copy.
+     * @return unmodifiable view of lap times list.
+     */
+    
+    private List<Long> privateGetLapTimes() {
+      synchronized(lapTimesListLock) {
+        if (lapTimes.isEmpty()) {
+          /*Return same empty list */
+          return Collections.emptyList();	
+        } else {
+          return Collections.unmodifiableList(lapTimes);
+        }
+      }	
+    }
+    
+    /**
      * Compare the sum of the lap times of this stopwatch with the specified stopwatch.
      * Two stopwatches can only be compared if the size of their lists of lap times is equal. 
      * @param the Stopwatch object to be compared with this one
@@ -293,16 +301,15 @@ public class StopwatchFactory {
     
     public int compareTo(Stopwatch stopwatch) {
       /* getLapTimes is synchronized */
-      if (this.getLapTimes().size() != stopwatch.getLapTimes().size()) {
+      if (this.privateGetLapTimes().size() != stopwatch.getLapTimes().size()) {
         throw new IllegalArgumentException("List sizes must be equal to compare");
       }
       /* Long because list is of type Long */
       Long sumThis = 0L;
       Long sumToCompare = 0L;
-      synchronized(lapTimesListLock) {
-        for (Long lap: this.lapTimes) {
-          sumThis += lap; 
-        }
+      List<Long> lapTimesView = privateGetLapTimes();
+      for (Long lap: lapTimesView ) {
+        sumThis += lap; 
       }
       /* Copy of lapTimes. getLapTimes is synchronized */
       for (Long lap: stopwatch.getLapTimes()) {
@@ -341,21 +348,20 @@ public class StopwatchFactory {
     
     @Override
     public String toString() {
-      /* Alternative to calling getLapTimes which could take more time and spcae */
-      synchronized(lapTimesListLock) {
-        StringBuilder stopwatchBuilder = new StringBuilder();
-        int counter = 1;
-        for (Long lapTime : lapTimes) {
-          stopwatchBuilder.append("Lap ");
-          stopwatchBuilder.append(counter);
-          stopwatchBuilder.append(": ");
-          stopwatchBuilder.append(lapTime);
-          stopwatchBuilder.append("\n");
-          counter++;
-        }
-        return stopwatchBuilder.toString();  
+      List<Long> lapTimesView = privateGetLapTimes();
+      StringBuilder stopwatchBuilder = new StringBuilder();
+      int counter = 1;
+      for (Long lapTime : lapTimesView) {
+        stopwatchBuilder.append("Lap ");
+        stopwatchBuilder.append(counter);
+        stopwatchBuilder.append(": ");
+        stopwatchBuilder.append(lapTime);
+        stopwatchBuilder.append("\n");
+        counter++;
       }
+      return stopwatchBuilder.toString();  
     }
+    
     
   }
   
