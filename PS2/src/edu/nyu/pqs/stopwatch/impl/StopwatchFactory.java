@@ -29,6 +29,7 @@ public class StopwatchFactory {
    * @throws IllegalArgumentException if <code>id</code> is empty, null, or
    *     already taken.
    */
+  
   public static Stopwatch getStopwatch(String id) {
     /* String immutable. Don't need Defensive Copy */
     if (id == null || id.isEmpty()) {
@@ -90,6 +91,7 @@ public class StopwatchFactory {
    * @return an unmodifiable view of the List of all created Stopwatch objects.  
    * Returns an empty List if no Stopwatches have been created.
    */
+  
   public static List<Stopwatch> getStopwatches() {
     /*Return unmodifiable view */
     synchronized(stopwatchesLock) {
@@ -107,6 +109,18 @@ public class StopwatchFactory {
     }
     return stopwatchesBuilder.toString();
   }
+  
+  /**
+   * The {@code BasicStopwatch} class represents a stopwatch object with a unique id.
+   * <p>
+   * {@code BasicStopwatch} provides no accessor methods apart from {@code getId()}.
+   * <p>
+   * {@code BasicStopwatch} includes methods to start, stop, reset, or record a lap
+   * and to compare two stopwatch objects using {@code equals} or {@code compareTo}.
+   * @see Stopwatch
+   * @author Eric
+   *
+   */
   
   private static class BasicStopwatch implements Stopwatch, Comparable<Stopwatch> {
     private final String id;
@@ -144,7 +158,7 @@ public class StopwatchFactory {
 
     /**
      * Starts the stopwatch.
-     * @throws IllegalStateException thrown when the stopwatch is already running
+     * @throws IllegalStateException when the stopwatch is already running
      */
     public void start() {
       synchronized(stateLock) {
@@ -180,8 +194,9 @@ public class StopwatchFactory {
      * or since start() was called if this is the first lap.
      * Lap times are calculated in nanoseconds for accuracy and converted to 
      * milliseconds for storage in the lap times list.
-     * @throws IllegalStateException thrown when the stopwatch isn't running
+     * @throws IllegalStateException when the stopwatch isn't running.
      */
+    
     public void lap() {
       synchronized(stateLock) {
         if (currentState == stopwatchStates.STOPPED) {
@@ -209,7 +224,7 @@ public class StopwatchFactory {
 
     /**
      * Stops the stopwatch (and records one final lap).
-     * @throws IllegalStateException thrown when the stopwatch isn't running
+     * @throws IllegalStateException when the stopwatch isn't running.
      */
     
     public void stop() {
@@ -277,7 +292,8 @@ public class StopwatchFactory {
      */
     
     public int compareTo(Stopwatch stopwatch) {
-      if (this.lapTimes.size() != stopwatch.getLapTimes().size()) {
+      /* getLapTimes is synchronized */
+      if (this.getLapTimes().size() != stopwatch.getLapTimes().size()) {
         throw new IllegalArgumentException("List sizes must be equal to compare");
       }
       /* Long because list is of type Long */
@@ -288,7 +304,7 @@ public class StopwatchFactory {
           sumThis += lap; 
         }
       }
-      /* Copy of lapTimes. Synchronization not needed */
+      /* Copy of lapTimes. getLapTimes is synchronized */
       for (Long lap: stopwatch.getLapTimes()) {
         sumToCompare += lap; 
       }
@@ -325,6 +341,7 @@ public class StopwatchFactory {
     
     @Override
     public String toString() {
+      /* Alternative to calling getLapTimes which could take more time and spcae */
       synchronized(lapTimesListLock) {
         StringBuilder stopwatchBuilder = new StringBuilder();
         int counter = 1;
