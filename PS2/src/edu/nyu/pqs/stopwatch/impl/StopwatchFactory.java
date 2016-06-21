@@ -1,27 +1,29 @@
 package edu.nyu.pqs.stopwatch.impl;
 
 import edu.nyu.pqs.stopwatch.api.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import edu.nyu.pqs.stopwatch.api.Stopwatch;
-
 /**
  * The StopwatchFactory is a thread-safe factory class for Stopwatch objects.
  * It maintains references to all created Stopwatch objects and provides a
- * convenient method for getting a list of those objects.
- *
+ * convenient method for getting an unmodifiable view of those list of objects.
+ * @see BasicStopwatch
+ * @author Eric
+ * 
  */
+
 public class StopwatchFactory {
   private static List<Stopwatch> stopwatches = new ArrayList<Stopwatch>();
-  private static Object stopwatchesLock;
+  private static Object stopwatchesLock = new Object();
+  
   /* Prevent Instantiation */	
   private StopwatchFactory() { } 
 
   /**
-   * Creates and returns a new Stopwatch object
+   * Creates and returns a new Stopwatch object. Adds the newly created Stopwatch 
+   * object to a list of all created Stopwatch objects. 
    * @param id The identifier of the new object
    * @return The new Stopwatch object
    * @throws IllegalArgumentException if <code>id</code> is empty, null, or
@@ -29,65 +31,106 @@ public class StopwatchFactory {
    */
   public static Stopwatch getStopwatch(String id) {
     /* String immutable. Don't need Defensive Copy */
+    if (id == null || id.isEmpty()) {
+      throw new IllegalArgumentException("id field cannot be null or empty String");
+    } else if (!(uniqueId(id))) {
+      throw new IllegalArgumentException("Provided id is already taken");  
+    }
     BasicStopwatch stopwatch = new BasicStopwatch(id);
     synchronized(stopwatchesLock) {
       stopwatches.add(stopwatch);
     }
     return stopwatch;
   }
-
+  
+  private static boolean uniqueId(String idToCheck) {
+    synchronized(stopwatchesLock) {
+      for (Stopwatch stopwatch: stopwatches) {
+        if (idToCheck.equals(stopwatch.getId())) {
+          return false;	
+        }
+      }
+    }
+    return true;
+  }
+  
   /**
-   * Returns a list of all created stopwatches
-   * @return a List of al creates Stopwatch objects.  Returns an empty
-   * list if no Stopwatches have been created.
+   * Removes the specified {@code Stopwatch} object reference 
+   * from the list of stopwatch objects, if it is present.
+   * @param stopwatch the {@code Stopwatch} object to be removed to the list of stopwatches.
+   * @return true if the stopwatch is successfully removed; false otherwise.
+   * @throws IllegalArgumentException if {@code Stopwatch} is null.
+   * @see removeAll
    */
-  public static List<Stopwatch> getStopwatches() {
-    /*Return unmodifiable view */
-	synchronized(stopwatchesLock) {
-      return Collections.unmodifiableList(stopwatches); //BasicStopwatch.stopwatches
+  
+  public static boolean remove(Stopwatch stopwatch) {
+    if(stopwatch == null){
+      throw new IllegalArgumentException("stopwatch cannot be null.");
+    }
+    int indexOfElement = -1;
+    synchronized(stopwatchesLock) {
+      for (int i = 0; i < stopwatches.size(); i++) {
+        if (stopwatch.equals(stopwatches.get(i))) {
+          indexOfElement = i;
+          break;
+        }
+      }
+      /* stopwatch not in list. */
+      if (indexOfElement == -1) {
+        return false;
+      } else {
+        stopwatches.remove(indexOfElement);
+        return true;
+      }
     }
   }
   
-  private static class BasicStopwatch implements Stopwatch {
-	//private static List<Stopwatch> stopwatches = new ArrayList<Stopwatch>();
-    private final String id;	
-	private List<Long> lapTimes;
-	private long lapStartTime; 
-	private long previousLapStartTime;
+  /**
+   * Returns an unmodifiable view of the list of all created stopwatches
+   * @return an unmodifiable view of the List of all created Stopwatch objects.  
+   * Returns an empty List if no Stopwatches have been created.
+   */
+  public static List<Stopwatch> getStopwatches() {
+    /*Return unmodifiable view */
+    synchronized(stopwatchesLock) {
+      return Collections.unmodifiableList(stopwatches);
+    }
+  }
+  
+  @Override
+  public String toString() {
+    StringBuilder stopwatchesBuilder = new StringBuilder();
+    synchronized(stopwatchesLock) {
+      for (Stopwatch stopwatch: stopwatches) {
+        stopwatchesBuilder.append(stopwatch.toString());  
+      }
+    }
+    return stopwatchesBuilder.toString();
+  }
+  
+  private static class BasicStopwatch implements Stopwatch, Comparable<Stopwatch> {
+    private final String id;
+    /* Lazily initialized, cached hashcode */
+    private volatile int hashCode;
+    private List<Long> lapTimes;
+    private long lapStartTime; 
+    private long previousLapStartTime;
     private enum stopwatchStates { RUNNING, STOPPED }
     private enum Actions { START, STOP, LAP, RESET }
     private stopwatchStates currentState = stopwatchStates.STOPPED;
     private Actions previousAction;
-    //private Object startStopLock;
     private Object lapTimesListLock;
     private Object lapTimeLock;
     private Object actionLock;
     private Object stateLock;
-    //separate locks for each variable
-    	
-    private BasicStopwatch(String id) {
-      if (id == null || id.isEmpty() || !(uniqueId(id))) {
-        throw new IllegalArgumentException("id field cannot be null or empty String");
-      }
-      //make sure the id doesnt already exist
-      //loop over stopwatches do id.equals
-	  this.id = id;
-	  this.lapTimes = new ArrayList<Long>();
-	  this.lapTimesListLock = new Object();
-	  this.lapTimeLock = new Object();
-	  this.actionLock = new Object();
-	  this.stateLock = new Object();
-    }
     
-    private boolean uniqueId(String idToCheck) {
-      synchronized(stopwatchesLock) {
-        for (Stopwatch stopwatch: stopwatches) {
-          if (idToCheck.equals(stopwatch.getId())) {
-            return false;	
-          }
-        }
-      }
-      return true;
+    private BasicStopwatch(String id) {
+      this.id = id;
+      this.lapTimes = new ArrayList<Long>();
+      this.lapTimesListLock = new Object();
+      this.lapTimeLock = new Object();
+      this.actionLock = new Object();
+      this.stateLock = new Object();
     }
     
     /**
@@ -106,8 +149,8 @@ public class StopwatchFactory {
     public void start() {
       synchronized(stateLock) {
         if (currentState == stopwatchStates.RUNNING) {
-      	  throw new IllegalStateException("stopwatch already running");	
-      	}
+          throw new IllegalStateException("stopwatch already running");	
+        }
         currentState = stopwatchStates.RUNNING;
       }
       /* Store previous action in order to release lock */
@@ -120,15 +163,15 @@ public class StopwatchFactory {
       }
       if (previousActionWasStop) {
         synchronized(lapTimeLock) {
-    	  lapStartTime = previousLapStartTime;
+          lapStartTime = previousLapStartTime;
         }
         synchronized(lapTimesListLock) {
-    	  lapTimes.remove(lapTimes.size() - 1);
-    	}
+          lapTimes.remove(lapTimes.size() - 1);
+        }
       } else {
         synchronized(lapTimeLock) {
-    	  lapStartTime = System.nanoTime();
-    	}
+          lapStartTime = System.nanoTime();
+        }
       }
     }
 
@@ -162,13 +205,13 @@ public class StopwatchFactory {
       synchronized(actionLock) {
         previousAction = Actions.LAP;  
       }
-    	
     }
 
     /**
      * Stops the stopwatch (and records one final lap).
      * @throws IllegalStateException thrown when the stopwatch isn't running
      */
+    
     public void stop() {
       lap();
       synchronized(stateLock) {
@@ -183,6 +226,7 @@ public class StopwatchFactory {
      * Resets the stopwatch.  If the stopwatch is running, this method stops the
      * watch and resets it.  This also clears all recorded laps.
      */
+    
     public void reset() {
       /* Store state in order to release lock */
       boolean stopwatchIsRunning = false;
@@ -193,35 +237,63 @@ public class StopwatchFactory {
         }
       }
       if (stopwatchIsRunning) {
-        long currentTime = System.nanoTime();
         synchronized(lapTimeLock) {
-          previousLapStartTime = currentTime;
-    	  lapStartTime = currentTime;
+          previousLapStartTime = 0L;
+          lapStartTime = 0L;
         }
-    	synchronized(lapTimesListLock) {
-    	  lapTimes.clear();
-    	}
-    	synchronized(actionLock) {
-    	  previousAction = Actions.RESET;
-    	}
+        synchronized(lapTimesListLock) {
+          lapTimes.clear();
+        }
+        synchronized(actionLock) {
+          previousAction = Actions.RESET;
+        }
       }
     }
 
     /**
-     * Returns a list of lap times (in milliseconds).  This method can be called at
+     * Returns a copy of the list of lap times (in milliseconds).  This method can be called at
      * any time and will not throw an exception.
      * @return a list of recorded lap times or an empty list.
      */
+    
     public List<Long> getLapTimes() {
-    	synchronized(lapTimesListLock) {
-    	if (lapTimes.isEmpty()) {
+      synchronized(lapTimesListLock) {
+        if (lapTimes.isEmpty()) {
           /*Return same empty list */
-    	  return Collections.emptyList();	
-    	} else {
-    	  /*Return copy of lapTimes */
-    	  return new ArrayList<Long>(lapTimes);
-    	}
-    	}
+          return Collections.emptyList();	
+        } else {
+          /*Return deep copy of lapTimes */
+          return new ArrayList<Long>(lapTimes);
+        }
+      }
+    }
+    
+    /**
+     * Compare the sum of the lap times of this stopwatch with the specified stopwatch.
+     * Two stopwatches can only be compared if the size of their lists of lap times is equal. 
+     * @param the Stopwatch object to be compared with this one
+     * @return  negative integer, zero, or a positive integer as this object is less than, equal to, 
+     * or greater than the specified object.
+     */
+    
+    public int compareTo(Stopwatch stopwatch) {
+      if (this.lapTimes.size() != stopwatch.getLapTimes().size()) {
+        throw new IllegalArgumentException("List sizes must be equal to compare");
+      }
+      /* Long because list is of type Long */
+      Long sumThis = 0L;
+      Long sumToCompare = 0L;
+      synchronized(lapTimesListLock) {
+        for (Long lap: this.lapTimes) {
+          sumThis += lap; 
+        }
+      }
+      /* Copy of lapTimes. Synchronization not needed */
+      for (Long lap: stopwatch.getLapTimes()) {
+        sumToCompare += lap; 
+      }
+      /* True if both lists are empty */
+      return sumThis.compareTo(sumToCompare);			
     }
     
     @Override
@@ -232,47 +304,42 @@ public class StopwatchFactory {
       if (!(o instanceof BasicStopwatch)) {
         return false;
       }
+      /* Extra check: If two stopwatches have equal ids they should reference
+       * the same stopwatch object.
+       */
       BasicStopwatch stopwatch = (BasicStopwatch)o;
-      synchronized(lapTimesListLock) {
-      if(lapTimes.size() != stopwatch.lapTimes.size()) {
-        return false;	  
-      }
-      for (int i = 0; i < lapTimes.size(); ++i) {
-          if (!(lapTimes.get(i).equals(stopwatch.lapTimes.get(i)))) {
-            return false;	  
-          }
-      }
-      return true;
-      }
+      return this.id.equals(stopwatch.getId());
     }
     
     @Override
     public int hashCode() {
-      int result = 17;
-      synchronized(lapTimesListLock) {
-      for (Long lapTime : lapTimes) {
-        long lapTimeUnboxed = lapTime.longValue();
-        result = 31 * result + (int) (lapTimeUnboxed ^ (lapTimeUnboxed >>> 32));	  
+      /* hashcode calculated from final field id */
+      int result = hashCode;
+      if (result == 0) {
+        result = 17;
+        result = 31 * result + Integer.parseInt(id);
+        hashCode = result;
       }
       return result;
-      }
     }
     
     @Override
     public String toString() {
       synchronized(lapTimesListLock) {
-      StringBuilder stopwatchBuilder = new StringBuilder();
-      int counter = 1;
-      for (Long lapTime : lapTimes) {
-    	  stopwatchBuilder.append("Lap ");
-    	  stopwatchBuilder.append(counter);
-    	  stopwatchBuilder.append(": ");
-    	  stopwatchBuilder.append(lapTime);
-    	  stopwatchBuilder.append("\n");
-    	  counter++;
-      }
-      return stopwatchBuilder.toString();  
+        StringBuilder stopwatchBuilder = new StringBuilder();
+        int counter = 1;
+        for (Long lapTime : lapTimes) {
+          stopwatchBuilder.append("Lap ");
+          stopwatchBuilder.append(counter);
+          stopwatchBuilder.append(": ");
+          stopwatchBuilder.append(lapTime);
+          stopwatchBuilder.append("\n");
+          counter++;
+        }
+        return stopwatchBuilder.toString();  
       }
     }
+    
   }
+  
 }

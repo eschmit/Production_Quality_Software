@@ -1,55 +1,90 @@
-Contact should also include a postal address.
+Contact Class:
 
-A Phone Number should probably be its own class even if internally you
-represent it as a String. A phone number is more of an object than a String.
-Furthermore, you can hide any implementation details from the user and modify 
-them in the future.
-You also shouldn't have too much restriction on the format that the user of the
-API can pass to phone number. You can pretty easily make validation checks internally 
-to reformat the number as you want it.
+Line 5 & 14: Contact should also include a postal address.
 
-Is there a reason none of the Contact fields are mandatory? Shouldn't name and 
+Line 8: Is there a reason none of the Contact fields are mandatory? Shouldn't name and 
 phone number be mandatory. If not, you should mention why creating an empty Contact 
 would be useful. Especially since your Contact class appears to be immutable so you can't
 set fields at a later time. You would need to create a new Contact object.
 You should mention these things.
 
-All of your methods that throw an exception should have an @throws tag. That's
+Line 13: Consider implementing Comparable so that a user of Contact can sort
+the list of contacts used in AddressBook.
+
+Line 15: A Phone Number should probably be its own class even if internally you
+represent it as a String. A phone number is more of an object than a String.
+Furthermore, you can hide any implementation details from the user and modify 
+them in the future.
+
+Line 27: Remove comment
+
+Line 33: All of your methods that throw an exception should have an @throws tag. That's
 where you should specify which exceptions the method throws.
 
-In the equals method, you need to use the instanceof operator to check that 'other' 
+Line 48: You also shouldn't have too much restriction on the format that the user of the
+API can pass to phone number. You can pretty easily make validation checks internally 
+to reformat the number as you want it.
+
+Line 52: Consider splitting the single parameter to getPhoneNumber into multiple 
+parameters to make phone number formats more consistent. For example, including area code
+or country code.
+
+Line 58: Include message in thrown exception to explicitly state the restrictions on the 
+method parameter.
+
+Line 144: See Effective Java for creating a hashcode method. You can cache hashcode
+values for immutable objects. Especially useful when the cost of calculating
+the hashcode is significant.
+
+Line 160: In the equals method, you need to use the instanceof operator to check that 'other' 
 is a Contact object before doing an explicit cast. Furthermore you don't need to 
 check for null if you perform instanceof.
-When you do String comparison you need to use 'equals' rather than '=='. The equality
+When you do String comparison you need to use '.equals' rather than '=='. The equality
 operator checks if the references are referring to the same object, not whether or not
 the two strings contain the same characters as your javadoc suggests.
 Your first comparison of 'if (this == other)' is implicitly the same as your final 
 comparison of all of the fields.
 
-Your AddressBook javadoc is a little misleading. It should say that AddressBook's store
-Contact objects. Then refer the user to the Contact class for what information
-Contact's store with an @see tag.
+AddressBook:
 
-Use Interfaces or top level classes when declaring an object. It allows for more generic
-programming and polymorphism. 
+Line 3: Restrict import statement to just what you are using. Don't import all
+of java.util and java.io.
+
+Line 8: Your AddressBook javadoc is a little misleading. It should say that 
+AddressBook's store Contact objects. Then refer the user to the Contact class 
+for what information Contact's store with an @see tag.
+
+Line 14: Use Interfaces or top level classes when declaring an object. It allows 
+for more generic programming and polymorphism. 
 ex. private List<Contact> allContacts;
 
+Line 25: javadoc says this method is for adding a new contact to address book.
+Should therefore check if contact already exists in address book before adding it.
+Or modify javadoc.
 
-Should add initial check to 'search' method for empty or null search string.
+Line 56: Search will contain duplicates. You should note that.
 
-In the 'match' method you should use StringBuilder to create the contactInfo string.
+Line 61: Use Interfaces or top level classes for return types.
+
+Line 62: Should add initial check to 'search' method for empty or
+null search string.
+
+Line 82: In the 'match' method you could consider using StringBuilder to create 
+the contactInfo string.
 Additionally, I see little reason to even create a new string which takes up time
 and space. You could just check each field one at a time in order of most to least 
 likely to be searched. 
 
-Your exceptions for 'importContact' and 'exportContact' could be more specific and 
-useful to someone using the API. For example, throw FileNotFoundException is the path
-does not exist.
+103 & 123: Your exceptions for 'importContact' and 'exportContact' could 
+be more specific and useful to someone using the API. 
+For example, throw FileNotFoundException if the path does not exist.
+You should also re-throw the exceptions. Returning false is not very useful to the 
+caller of the method. 
 
 You don't have a method to retrieve a copy of the list of contacts.
 How would someone using your API show the list of contacts in an address book 
 application to an end user?
 
-Both classes could also use a toString method. You should probably always override
-toString.
+Both classes could also use a toString method. 
+You should always override toString.
 
