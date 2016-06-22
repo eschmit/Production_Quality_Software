@@ -297,9 +297,13 @@ public class StopwatchFactory {
      * @param the Stopwatch object to be compared with this one
      * @return  negative integer, zero, or a positive integer as this object is less than, equal to, 
      * or greater than the specified object.
+     * @throws IllegalArgumentException if {@code stopwatch} is null.
      */
     
     public int compareTo(Stopwatch stopwatch) {
+      if (stopwatch == null) {
+        throw new IllegalArgumentException("stopwatch cannot be null.");   	  
+      }
       /* getLapTimes is synchronized */
       if (this.privateGetLapTimes().size() != stopwatch.getLapTimes().size()) {
         throw new IllegalArgumentException("List sizes must be equal to compare");
