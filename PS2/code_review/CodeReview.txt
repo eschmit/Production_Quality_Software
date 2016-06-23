@@ -62,6 +62,9 @@ Line 25: javadoc says this method is for adding a new contact to address book.
 Should therefore check if contact already exists in address book before adding it.
 Or modify javadoc.
 
+Line 38: Remove all code that finds index of contact and removes it and 
+change to 'return allContacts.remove(contact)'.
+
 Line 56: Search will contain duplicates. You should note that.
 
 Line 61: Use Interfaces or top level classes for return types.
