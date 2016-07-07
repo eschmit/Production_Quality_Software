@@ -73,4 +73,3 @@ line 135: stopwatchId will never be null.
 
 line 139: return StopwatchId.equals(other.StopwatchId)
 
-
