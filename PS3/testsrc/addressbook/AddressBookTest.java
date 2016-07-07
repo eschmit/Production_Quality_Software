@@ -107,12 +107,22 @@ public class AddressBookTest {
     assertThat(matches, hasItems(contact,secondContact));
     matches = addressbook.search(AddressBook.ContactAttribute.NAME, "e");
     assertThat(matches, hasItems(contact,secondContact));
+    matches = addressbook.search(AddressBook.ContactAttribute.NAME, "eric");
+    assertThat(matches, hasItems(contact));
     matches = addressbook.search(AddressBook.ContactAttribute.EMAIL, "es");
     assertThat(matches, hasItems(contact));
     matches = addressbook.search(AddressBook.ContactAttribute.ADDRESS, "New York");
     assertThat(matches, hasItems(contact));
     matches = addressbook.search(AddressBook.ContactAttribute.NOTE, "made up");
     assertThat(matches, hasItems(contact));
+    matches = addressbook.search(AddressBook.ContactAttribute.NAME, "brad");
+    assertTrue(matches.isEmpty());
+    matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "347");
+    assertTrue(matches.isEmpty());
+    matches = addressbook.search(AddressBook.ContactAttribute.NOTE, "not in note");
+    assertTrue(matches.isEmpty());
+    matches = addressbook.search(AddressBook.ContactAttribute.EMAIL, "wrongemail");
+    assertTrue(matches.isEmpty());
   }
 
   @Test
