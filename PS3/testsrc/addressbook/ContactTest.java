@@ -20,7 +20,7 @@ public class ContactTest {
 
   @Test
   public void testGetName() {
-    assertEquals(new MatchableString("Eric Schmitterer").toString(), 
+    assertEquals(new MatchableString("Eric Schmitterer").toString(),
         contact.getName());
   }
 
@@ -32,13 +32,13 @@ public class ContactTest {
 
   @Test
   public void testGetEmailAddress() {
-    assertEquals(new MatchableString("es3620@nyu.edu").toString(), 
+    assertEquals(new MatchableString("es3620@nyu.edu").toString(),
         contact.getEmailAddress());
   }
-  
+
   @Test
   public void testGetAddress() {
-    assertEquals(new MatchableString("140 East 64 New York, New York").toString(), 
+    assertEquals(new MatchableString("140 East 64 New York, New York").toString(),
         contact.getAddress());
   }
 
@@ -51,8 +51,8 @@ public class ContactTest {
   public void testGetPhoneNumber() {
     assertEquals(new PhoneNumber("9173334444").toString(), contact.getPhoneNumber());
   }
-  
-  /* Fails because Contact toString method uses MatchableString not MatchableString.toString() 
+
+  /* Fails because Contact toString method uses MatchableString not MatchableString.toString()
    * See getter methods */
   @Test
   public void testToString() {
@@ -91,7 +91,7 @@ public class ContactTest {
   public Contact buildContact(String name, String number, String address,
       String email, String note) {
     return new Contact.Builder().withName(name).withPhoneNumber(number)
-        .withAddress(address).withEmail(email).withNote(note).build();	  
+        .withAddress(address).withEmail(email).withNote(note).build(); 
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -103,9 +103,9 @@ public class ContactTest {
   @Test(expected = IllegalArgumentException.class)
   public void testWithName_phoneReassignment() {
     new Contact.Builder().withName("Eric").withPhoneNumber("9173334444").
-    withPhoneNumber("3473334444").build();		
+    withPhoneNumber("3473334444").build();	
   }
-  
+
   @Test(expected = IllegalArgumentException.class)
   public void testWithName_addressReassignment() {
     new Contact.Builder().withName("Eric").withPhoneNumber("9173334444")

@@ -23,8 +23,8 @@ public class AddressBookTest {
 
   @Before
   public void setUp() {
-	addressbook = new AddressBook();
-	contact = new Contact.Builder().withName("Eric Schmitterer")
+    addressbook = new AddressBook();
+    contact = new Contact.Builder().withName("Eric Schmitterer")
         .withPhoneNumber("9178889999")
         .withAddress("140 East 64 New York, New York")
         .withEmail("es3620@nyu.edu")
@@ -68,7 +68,7 @@ public class AddressBookTest {
   @Test
   public void testAddressBook_ContainsAddedItems() {
     Contact secondContact = new Contact.Builder().withName("Chet")
-    		.withPhoneNumber("9173334444").build();
+        .withPhoneNumber("9173334444").build();
     addContact(contact);
     addContact(secondContact);
     /* I added getUnmodifiableContactsList method to AddressBook*/
@@ -81,7 +81,7 @@ public class AddressBookTest {
     ArrayList<Contact> matches = addressbook.search(AddressBook.ContactAttribute.NAME, null);
     assertTrue(matches.isEmpty());
   }
-  
+
   @Test
   public void testSearch_searchNullField() {
     Contact secondContact = new Contact.Builder().withName("Chet").build();
@@ -93,9 +93,9 @@ public class AddressBookTest {
   @Test
   public void testSearch_emptyAddressBook() {
     ArrayList<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
-    assertTrue(matches.isEmpty());  
+    assertTrue(matches.isEmpty());
   }
-  
+
   /* Perform search on each field */
   @Test
   public void testSearch_allFields() {
@@ -114,19 +114,19 @@ public class AddressBookTest {
     matches = addressbook.search(AddressBook.ContactAttribute.NOTE, "made up");
     assertThat(matches, hasItems(contact));
   }
-  
+
   @Test
   public void testSave_emptyAddressBook() {
     try {
       createTempFile();
-      addressbook.save(temp.getAbsolutePath()); 
+      addressbook.save(temp.getAbsolutePath());
     } catch (FileNotFoundException aFileNotFoundException) {
       fail("Did not expect a FileNotFoundException to be thrown");
     } catch (IOException e) {
-      fail("Did not expect an IOException to be thrown");	
-    }   
+      fail("Did not expect an IOException to be thrown");
+    }
   }
-  
+
   public void createTempFile() {
     try {
       temp = File.createTempFile("temp-file", ".tmp");
@@ -134,7 +134,7 @@ public class AddressBookTest {
       fail("Did not expect an IOException to be thrown");
     }
   }
-  
+
   /* Method fails because it does not test for NPE */
   @Test
   public void testSave_nullSearchParam() {
@@ -142,13 +142,13 @@ public class AddressBookTest {
     try {
       addressbook.save(null);
       fail("Expected a NullPointerException to be thrown");
-	} catch (FileNotFoundException e) {
+    } catch (FileNotFoundException e) {
       fail("Expected a NullPointerException to be thrown");
-	} catch (IOException e) {
+    } catch (IOException e) {
       fail("Expected a NullPointerException to be thrown");
-	}catch (NullPointerException aNullPointerException){
+    }catch (NullPointerException aNullPointerException){
       assertThat(aNullPointerException.getMessage(), containsString("null"));
-	}
+    }
   }
 
   @Test
@@ -158,26 +158,26 @@ public class AddressBookTest {
       addressbook.save("/made/up/file/path");
       fail("Expected a FileNotFoundException to be thrown");
     } catch (FileNotFoundException aFileNotFoundException) {
-	  assertThat(aFileNotFoundException.getMessage(), 
-          containsString("/made/up/file/path (No such file or directory)"));	
+      assertThat(aFileNotFoundException.getMessage(),
+          containsString("/made/up/file/path (No such file or directory)"));
     } catch (IOException e) {
-      fail("Expected a FileNotFoundException to be thrown");		
+      fail("Expected a FileNotFoundException to be thrown");	
     } 
   }
-  
+
   @Test
   public void testSave_ToTempFile() {
     addContact(contact);
     try {
       createTempFile();
-      addressbook.save(temp.getAbsolutePath()); 
+      addressbook.save(temp.getAbsolutePath());
     } catch (FileNotFoundException aFileNotFoundException) {
       fail("Did not expect a FileNotFoundException to be thrown");
     } catch (IOException e) {
       fail("Did not expect an IOException to be thrown");
-    } 
+    }
   }
-  
+
   @Test
   public void testAddressBook_readEmptyFile() {
     try {
@@ -194,7 +194,7 @@ public class AddressBookTest {
 
   @Test
   public void testAddressBook_FromFilePath() {
-	Contact secondContact = new Contact.Builder().withName("Chet")
+    Contact secondContact = new Contact.Builder().withName("Chet")
         .withPhoneNumber("9173334444").build();
     addContact(contact);
     addContact(secondContact);
