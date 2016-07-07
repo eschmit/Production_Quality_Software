@@ -3,6 +3,8 @@ package addressbook;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -75,7 +77,7 @@ public class AddressBook {
     //Convert the JSON file to an ArrayList and assign it as contactDirectory
     String formattedJSON = json.toString();
     Contact[] tempArray = new Gson().fromJson(formattedJSON, Contact[].class);
-    contactDirectory = new ArrayList<>(Arrays.asList(tempArray));
+    contactDirectory = new ArrayList(Arrays.asList(tempArray));
   }
   
   /**
@@ -101,6 +103,8 @@ public class AddressBook {
   public boolean removeContact(Contact entry) {
     return contactDirectory.remove(entry);
   }
+  
+  
   
   /**
    * A search feature that allows you to search the address book by an attribute
@@ -168,5 +172,10 @@ public class AddressBook {
       allContacts.append("\n");
     }
     return allContacts.toString();
+  }
+  
+  public final List<Contact> getUnmodifiableContactsList() {
+    /*Return unmodifiable view */  
+    return Collections.unmodifiableList(contactDirectory);
   }
 }

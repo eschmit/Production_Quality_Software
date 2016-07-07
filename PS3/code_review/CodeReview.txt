@@ -1,2 +1,76 @@
-Please enter your code review in this file as plain text
-and make sure to include it when you commit your project.
+StopwatchFactory:
+
+line 17: remove comment. You don't need to explain that you are using
+List interface in the declaration, that is common practice.
+
+line 28: Don't synchronize entire method. Synchronize only the block
+of code that needs synchronization.
+"stopwatches" is a CopyOnWriteArrayList. According to the documentation
+iterating over it is already sychronized and mutations to the ArrayList
+create a new ArrayList. Therefore, this method doesn't require any 
+additional synchronization.
+Don't explicitly state unchecked exceptions in method signature.
+Include in javadoc with @throws tag.
+
+line 34: Include a message in the exception since this illegal argument 
+is for a different reason.
+
+lines 35 & 36: This comment is unclear. Sounds like a note to yourself. 
+Remove it.
+
+line 52: Why all the typcasting? CopyOnWriteArrayList is a List. 
+Be careful when cloning a list. Cloning returns references to the Stopwatch 
+objects in the list. StopwatchCreator appears to be immutable but that may
+not be the case for all Stopwatch objects. Both Stopwatch and StopwatchCreator
+are sub-classable. Better to return a new object 
+or an unmodifiable view of the list.
+
+StopwatchCreator:
+
+Consider making StopwatchCreator a private nested class instead 
+so that it is not exposed to the rest of the package. 
+
+line 15: Shouldn't the class be package private? Consistent with
+the constructor visibility.
+
+line 16: favor enum to boolean. May want to later add states the stopwatch
+can be in. Also 'running' being false isn't that clear. It could be paused 
+or stopped.
+
+line 19: the default value for long is 0L.
+pastTime could probably use a comment to explain what it is/does.
+
+lines 23 - 25: These comments are pretty unnecessary.
+
+line 44: Don't make the entire method synchronized. All other threads will 
+need to wait until this entire method is completed in order to obtain the lock.
+Create multiple locks for different fields that need synchronization across
+threads but who are mutually exclusive. Then synchronize on access to the fields.
+
+line 45: Change to: if (running)
+
+line 48: Use System.nanoTime() instead of System.currentTimeMillis();
+It's more accurate. Then convert to milliseconds.
+
+
+line 65: change to: if (!running)
+
+line 107: getLapTimes() probably shouldn't record a lap if the stopwatch is running
+because that lap will be inconsistent with a different thread that later records that 
+lap when lap() or stop() is pressed.
+
+line 110: use List interface in declaration.
+
+line 114: Remove casts. 
+
+line 124: Two Stopwatches are not equal unless they reference the same object
+so this method is unnecessary. Furthermore, two Stopwatches can only have
+the same id if they reference the same object.
+Also, you don't need to check for null in equals() because instanceof tests 
+for that implicitly.
+
+line 135: stopwatchId will never be null.
+
+line 139: return StopwatchId.equals(other.StopwatchId)
+
+
