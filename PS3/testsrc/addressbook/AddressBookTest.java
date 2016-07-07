@@ -78,7 +78,7 @@ public class AddressBookTest {
   @Test(expected = NullPointerException.class)
   public void testSearch_nullSearchParam() {
     addressbook.addContact(contact);
-    ArrayList<Contact> matches = addressbook.search(AddressBook.ContactAttribute.NAME, null);
+    List<Contact> matches = addressbook.search(AddressBook.ContactAttribute.NAME, null);
     assertTrue(matches.isEmpty());
   }
 
@@ -86,13 +86,13 @@ public class AddressBookTest {
   public void testSearch_searchNullField() {
     Contact secondContact = new Contact.Builder().withName("Chet").build();
     addContact(secondContact);
-    ArrayList<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
+    List<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
     assertTrue(matches.isEmpty());
   }
 
   @Test
   public void testSearch_emptyAddressBook() {
-    ArrayList<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
+    List<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
     assertTrue(matches.isEmpty());
   }
 
@@ -103,7 +103,7 @@ public class AddressBookTest {
         .withPhoneNumber("9173334444").build();
     addContact(contact);
     addContact(secondContact);
-    ArrayList<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
+    List<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
     assertThat(matches, hasItems(contact,secondContact));
     matches = addressbook.search(AddressBook.ContactAttribute.NAME, "e");
     assertThat(matches, hasItems(contact,secondContact));
