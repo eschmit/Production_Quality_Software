@@ -93,6 +93,12 @@ public class ContactTest {
     return new Contact.Builder().withName(name).withPhoneNumber(number)
         .withAddress(address).withEmail(email).withNote(note).build(); 
   }
+  
+  /* Fails because builder methods don't check for null */
+  @Test(expected = NullPointerException.class) 
+  public void testBuilder_nullParams() {
+    buildContact(null, null, null, null, null);
+  }
 
   @Test(expected = IllegalArgumentException.class)
   public void testWithName_nameReassignment() {
@@ -132,10 +138,8 @@ public class ContactTest {
 
   @Test
   public void testContact_notSameContact() {
-    Contact contactCopy = new Contact.Builder().withName("Eric Schmitterer")
-        .withPhoneNumber("9173334444")
-        .withAddress("140 East 64 New York, New York")
-        .withEmail("es3620@nyu.edu").withNote("Made up contact").build();
+    Contact contactCopy = buildContact("Eric Schmitterer", "9173334444", 
+        "140 East 64 New York, New York", "es3620@nyu.edu", "Made up contact");
     assertNotSame("should not be same Contact", contact, contactCopy);
   }
 

@@ -66,12 +66,17 @@ public class AddressBookTest {
 
   @Test
   public void testAddressBook_ContainsAddedItems() {
-    Contact secondContact = new Contact.Builder().withName("Chet")
-        .withPhoneNumber("9173334444").build();
+    Contact secondContact = buildContact("Chet", "9173334444", "", "", "");
     addContact(contact);
     addContact(secondContact);
     /* I added getUnmodifiableContactsList method to AddressBook*/
     assertThat(addressbook.getUnmodifiableContactsList(), hasItems(contact,secondContact));
+  }
+  
+  public Contact buildContact(String name, String number, String address,
+      String email, String note) {
+    return new Contact.Builder().withName(name).withPhoneNumber(number)
+        .withAddress(address).withEmail(email).withNote(note).build(); 
   }
 
   @Test(expected = NullPointerException.class)
@@ -98,8 +103,7 @@ public class AddressBookTest {
   /* Perform search on each field */
   @Test
   public void testSearch_allFields() {
-    Contact secondContact = new Contact.Builder().withName("Chet")
-        .withPhoneNumber("9173334444").build();
+    Contact secondContact = buildContact("Chet", "9173334444", "", "", "");
     addContact(contact);
     addContact(secondContact);
     List<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
@@ -203,8 +207,7 @@ public class AddressBookTest {
 
   @Test
   public void testAddressBook_FromFilePath() {
-    Contact secondContact = new Contact.Builder().withName("Chet")
-        .withPhoneNumber("9173334444").build();
+    Contact secondContact = buildContact("Chet", "9173334444", "", "", "");
     addContact(contact);
     addContact(secondContact);
     try {
@@ -223,8 +226,7 @@ public class AddressBookTest {
   @Test
   public void testAddressBook_withNullPath() {
     addContact(contact);
-    addContact(new Contact.Builder().withName("Chet")
-        .withPhoneNumber("9173334444").build());
+    addContact(buildContact("Chet", "9173334444", "", "", ""));
     try {
       createTempFile();
       addressbook.save(temp.getAbsolutePath());
@@ -242,8 +244,7 @@ public class AddressBookTest {
   @Test
   public void testAddressBook_FileNotFound() {
     addContact(contact);
-    addContact(new Contact.Builder().withName("Chet")
-        .withPhoneNumber("9173334444").build());
+    addContact(buildContact("Chet", "9173334444", "", "", ""));
     try {
       createTempFile();
       addressbook.save(temp.getAbsolutePath());
@@ -269,8 +270,7 @@ public class AddressBookTest {
     contactsBuilder.append(contact.toString());
     contactsBuilder.append("\n");
     assertEquals(contactsBuilder.toString(), addressbook.toString());
-    Contact secondContact = new Contact.Builder().withName("Chet")
-        .withPhoneNumber("9173334444").build();
+    Contact secondContact = buildContact("Chet", "9173334444", "", "", "");
     addContact(secondContact);
     contactsBuilder.append(secondContact.toString());
     contactsBuilder.append("\n");
