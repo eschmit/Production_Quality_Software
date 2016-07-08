@@ -27,9 +27,6 @@ or an unmodifiable view of the list.
 
 StopwatchCreator:
 
-Consider making StopwatchCreator a private nested class instead 
-so that it is not exposed to the rest of the package. 
-
 line 15: Shouldn't the class be package private? Consistent with
 the constructor visibility.
 
@@ -46,12 +43,15 @@ line 44: Don't make the entire method synchronized. All other threads will
 need to wait until this entire method is completed in order to obtain the lock.
 Create multiple locks for different fields that need synchronization across
 threads but who are mutually exclusive. Then synchronize on access to the fields.
+Additionally, putting synchronize in method signature means you are synchronizing 
+on 'this' object which can result in deadlocks because the user of the API
+can access that lock. 
 
 line 45: Change to: if (running)
 
+
 line 48: Use System.nanoTime() instead of System.currentTimeMillis();
 It's more accurate. Then convert to milliseconds.
-
 
 line 65: change to: if (!running)
 
@@ -72,4 +72,5 @@ for that implicitly.
 line 135: stopwatchId will never be null.
 
 line 139: return StopwatchId.equals(other.StopwatchId)
+
 
