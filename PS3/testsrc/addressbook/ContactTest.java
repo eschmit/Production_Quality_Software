@@ -13,9 +13,9 @@ public class ContactTest {
 
   @Before
   public void setUp() {
-    contact = new Contact.Builder().withName("Eric Schmitterer")
-        .withPhoneNumber("9173334444").withAddress("140 East 64 New York, New York")
-        .withEmail("es3620@nyu.edu").withNote("Made up contact").build();
+    contact = buildContact("Eric Schmitterer", "9173334444",
+        "140 East 64 New York, New York", "es3620@nyu.edu",
+        "Made up contact");
   }
 
   @Test
@@ -157,7 +157,7 @@ public class ContactTest {
 
   @Test
   public void testMatch_NullField() {
-    Contact secondContact = new Contact.Builder().withName("Chet").build();
+    Contact secondContact = buildContact("Chet", "", "", "", "");
     boolean found = secondContact.match(AddressBook.ContactAttribute
         .PHONE, "917");
     assertFalse(found);

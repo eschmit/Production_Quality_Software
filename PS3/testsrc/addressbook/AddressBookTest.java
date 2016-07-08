@@ -88,7 +88,7 @@ public class AddressBookTest {
 
   @Test
   public void testSearch_searchNullField() {
-    Contact secondContact = new Contact.Builder().withName("Chet").build();
+    Contact secondContact = buildContact("Chet", "", "", "", "");
     addContact(secondContact);
     List<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
     assertTrue(matches.isEmpty());
