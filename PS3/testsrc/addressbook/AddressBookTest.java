@@ -23,11 +23,9 @@ public class AddressBookTest {
   @Before
   public void setUp() {
     addressbook = new AddressBook();
-    contact = new Contact.Builder().withName("Eric Schmitterer")
-        .withPhoneNumber("9178889999")
-        .withAddress("140 East 64 New York, New York")
-        .withEmail("es3620@nyu.edu")
-        .withNote("Made up contact").build();
+    contact = buildContact("Eric Schmitterer", "9173334444",
+        "140 East 64 New York, New York", "es3620@nyu.edu",
+        "Made up contact");
   }
 
   @After
@@ -87,8 +85,16 @@ public class AddressBookTest {
   }
 
   @Test
-  public void testSearch_searchNullField() {
+  public void testSearch_searchEmptyField() {
     Contact secondContact = buildContact("Chet", "", "", "", "");
+    addContact(secondContact);
+    List<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
+    assertTrue(matches.isEmpty());
+  }
+  
+  @Test
+  public void testSearch_searchNullField() {
+    Contact secondContact = new Contact.Builder().withName("Chet").build();
     addContact(secondContact);
     List<Contact> matches = addressbook.search(AddressBook.ContactAttribute.PHONE, "917");
     assertTrue(matches.isEmpty());
@@ -150,7 +156,7 @@ public class AddressBookTest {
 
   /* Method fails because it does not test for NPE */
   @Test
-  public void testSave_nullSearchParam() {
+  public void testSave_nullParam() {
     addContact(contact);
     try {
       addressbook.save(null);

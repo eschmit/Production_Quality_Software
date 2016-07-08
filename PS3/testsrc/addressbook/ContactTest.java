@@ -156,8 +156,16 @@ public class ContactTest {
   }
 
   @Test
-  public void testMatch_NullField() {
+  public void testMatch_EmptyField() {
     Contact secondContact = buildContact("Chet", "", "", "", "");
+    boolean found = secondContact.match(AddressBook.ContactAttribute
+        .PHONE, "917");
+    assertFalse(found);
+  }
+
+  @Test
+  public void testMatch_NullField() {
+    Contact secondContact = new Contact.Builder().withName("Chet").build();
     boolean found = secondContact.match(AddressBook.ContactAttribute
         .PHONE, "917");
     assertFalse(found);
