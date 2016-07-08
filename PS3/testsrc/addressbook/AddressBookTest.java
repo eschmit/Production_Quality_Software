@@ -63,7 +63,7 @@ public class AddressBookTest {
   }
 
   @Test
-  public void testAddressBook_ContainsAddedItems() {
+  public void testAddressBook_containsAddedItems() {
     Contact secondContact = buildContact("Chet", "9173334444", "", "", "");
     addContact(contact);
     addContact(secondContact);
@@ -171,7 +171,7 @@ public class AddressBookTest {
   }
 
   @Test
-  public void testSave_FileNotFound() {
+  public void testSave_fileNotFound() {
     addContact(contact);
     try {
       addressbook.save("/made/up/file/path");
@@ -212,7 +212,7 @@ public class AddressBookTest {
   }
 
   @Test
-  public void testAddressBook_FromFilePath() {
+  public void testAddressBook_fromFilePath() {
     Contact secondContact = buildContact("Chet", "9173334444", "", "", "");
     addContact(contact);
     addContact(secondContact);
@@ -248,7 +248,7 @@ public class AddressBookTest {
   }
 
   @Test
-  public void testAddressBook_FileNotFound() {
+  public void testAddressBook_fileNotFound() {
     addContact(contact);
     addContact(buildContact("Chet", "9173334444", "", "", ""));
     try {

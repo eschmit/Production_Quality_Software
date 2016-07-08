@@ -25,7 +25,7 @@ public class ContactTest {
   }
 
   @Test(expected = NullPointerException.class)
-  public void testGetName_Null() {
+  public void testGetName_null() {
     Contact newContact = new Contact.Builder().withName(null).build();
     newContact.getName().toString();
   }
@@ -156,7 +156,7 @@ public class ContactTest {
   }
 
   @Test
-  public void testMatch_EmptyField() {
+  public void testMatch_emptyField() {
     Contact secondContact = buildContact("Chet", "", "", "", "");
     boolean found = secondContact.match(AddressBook.ContactAttribute
         .PHONE, "917");
@@ -164,7 +164,7 @@ public class ContactTest {
   }
 
   @Test
-  public void testMatch_NullField() {
+  public void testMatch_nullField() {
     Contact secondContact = new Contact.Builder().withName("Chet").build();
     boolean found = secondContact.match(AddressBook.ContactAttribute
         .PHONE, "917");
