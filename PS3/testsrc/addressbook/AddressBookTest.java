@@ -185,7 +185,7 @@ public class AddressBookTest {
   }
 
   @Test
-  public void testSave_ToTempFile() {
+  public void testSave_toTempFile() {
     addContact(contact);
     try {
       createTempFile();
