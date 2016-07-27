@@ -11,8 +11,8 @@ package edu.nyu.pqs.collections;
  * {@code GraphEdge<V>} objects that specify the incident edges 
  * adjacent edges to the vertex.
  * <p>
- * The {@code GraphVertex<V>} class has the following methods to retrieve
- * the vertex properties: getVertex(), getIndex(), and getAdjacentEdges().
+ * The {@code GrapEdge<V>} class has the following methods to retrieve
+ * the edge properties: getLabel() and getconnectingVertex().
  * 
  * @author Eric
  * @param <V> The generic value of the connecting {@code GraphVertex<V>}.

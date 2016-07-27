@@ -67,7 +67,7 @@ public class GraphTest {
   @Test(expected = IllegalArgumentException.class)
   public void testAddRoot_rootPreviouslySet() {
     assertTrue(graph.addRoot("New York"));
-	graph.addRoot("Boston");  
+    graph.addRoot("Boston");  
   }
 
   @Test
@@ -132,13 +132,13 @@ public class GraphTest {
 
   @Test
   public void testAdd_longString() {
-    assertTrue(graph.
-        addRoot("Llanfair­pwllgwyn­gyllgo­gerychwyrn­drobwll­llanty­silio­gogogoch"));
+    assertTrue(graph.addRoot(
+        "Llanfair­pwllgwyn­gyllgo­gerychwyrn­drobwll­llanty­silio­gogogoch"));
   }
 
   @Test
   public void testSetVertex() {
-	createMiniGraph();
+    createMiniGraph();
     assertTrue(graph.setVertex("New York", "testCity"));
     testVertexSettersHelper();
   }
@@ -333,17 +333,17 @@ public class GraphTest {
   public void testDFSIterator_concurrent() {
     createGraph();
     new Thread(new Runnable() {
-        @Override
-        public void run() {
-          DFSIteratorHelper();
-        }
+      @Override
+      public void run() {
+        DFSIteratorHelper();
+      }
     }).start();
 
     new Thread(new Runnable() {
-        @Override
-        public void run() {
-          DFSIteratorHelper();
-        }
+      @Override
+      public void run() {
+        DFSIteratorHelper();
+      }
     }).start();
   }
 
@@ -372,17 +372,17 @@ public class GraphTest {
   public void testBFSIterator_concurrent() {
     createGraph();
     new Thread(new Runnable() {
-        @Override
-	    public void run() {
-          BFSIteratorHelper();
-        }
+      @Override
+      public void run() {
+        BFSIteratorHelper();
+      }
     }).start();
 
     new Thread(new Runnable() {
-        @Override
-        public void run() {
-          BFSIteratorHelper();
-        }
+      @Override
+      public void run() {
+        BFSIteratorHelper();
+      }
     }).start(); 
   }
 
@@ -484,8 +484,9 @@ public class GraphTest {
   public void testFilterIterator_orPredicate() { 
     createGraph();
     Iterator<GraphVertex<String>> iterator = graph.BFSIterator();
-    Iterator<GraphVertex<String>> filterIterator = new FilterIterator<String>(
-        iterator, new OrPredicate<String>(predicate1, new Predicate<String>() {
+    Iterator<GraphVertex<String>> filterIterator =
+        new FilterIterator<String>(iterator,
+        new OrPredicate<String>(predicate1, new Predicate<String>() {
           @Override
           public boolean accept(String s) {
             return s.length() < 3;
@@ -501,5 +502,5 @@ public class GraphTest {
     GraphVertex<String> dc = filterIterator.next();
     assertEquals("DC", dc.getVertex());
   }
-  
+
 }
