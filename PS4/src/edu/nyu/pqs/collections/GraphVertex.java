@@ -42,5 +42,4 @@ public class GraphVertex<V> {
   public List<GraphEdge<V>> getAdjacentEdges() {
     return adjacentEdges;
   }
- 
 }

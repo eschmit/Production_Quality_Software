@@ -502,5 +502,4 @@ public class GraphTest {
     GraphVertex<String> dc = filterIterator.next();
     assertEquals("DC", dc.getVertex());
   }
-
 }

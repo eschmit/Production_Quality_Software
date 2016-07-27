@@ -55,8 +55,9 @@ public class Graph<V> {
    * only appear in the iteration if they are added or removed to/from a vertex
    * that has not yet been retrieved by a next() call.
    * However, caution is advised when adding or removing vertices during iteration
-   * as it might cause unexpected behavior. A new Iterator should instead be retrieved
-   * after modifying the graph.
+   * as it might cause unexpected behavior, especially when iterating over the same
+   * graph with different iterators in different threads. 
+   * A new Iterator should instead be retrieved after modifying the graph.
    * 
    * @return an Iterator object that iterates over GraphVertex<V> objects
    * via Breadth First Search.
@@ -82,7 +83,7 @@ public class Graph<V> {
    * that has not yet been retrieved by a next() call.
    * However, caution is advised when adding or removing vertices during iteration
    * as it might cause unexpected behavior, especially when iterating over the same
-   * graph with different iterators in different threads. 
+   * graph with different iterators in different threads.
    * A new Iterator should instead be retrieved
    * after modifying the graph.
    * 
@@ -417,7 +418,6 @@ public class Graph<V> {
       }
       return adjacentVertices;
     }
-
   }
 
   /**
@@ -599,7 +599,5 @@ public class Graph<V> {
     public void remove() {
       return;
     }
-	
   }
-
 }
