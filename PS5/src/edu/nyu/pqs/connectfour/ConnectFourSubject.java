@@ -43,7 +43,7 @@ public interface ConnectFourSubject {
    * @param playerTurn the color of the piece to be added to
    * the board.
    */
-  void notifyObserversUpdateBoardDisplay(int row, int column, ConnectFourColors playerTurn);
+  void notifyObserversUpdateBoardDisplay(int row, int column, ConnectFourColor playerTurn);
 
   /**
    * Notify all registered observers that the board

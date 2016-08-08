@@ -21,7 +21,7 @@ public class ConnectFourModel implements ConnectFourSubject {
   private List<ConnectFourObserver> observers;
   private static final int NUM_ROWS = 6;
   private static final int NUM_COLUMNS = 7;
-  private ConnectFourColors[][] gameGrid;
+  private ConnectFourColor[][] gameGrid;
   private final ConnectFourPlayer player1;
   private final ConnectFourPlayer player2;
   private ConnectFourPlayer playerTurn;
@@ -88,11 +88,11 @@ public class ConnectFourModel implements ConnectFourSubject {
 
   private ConnectFourModel(Builder builder) {
     observers = new ArrayList<ConnectFourObserver>();
-    gameGrid = new ConnectFourColors[NUM_ROWS][NUM_COLUMNS];
+    gameGrid = new ConnectFourColor[NUM_ROWS][NUM_COLUMNS];
     player1 = builder.player1;
     if (player1.getPlayerType().equals(PlayerType.COMPUTER) && 
         builder.player2 == null) {
-      player2 = ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColors.RED);
+      player2 = ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColor.RED);
     } else {
       player2 = ((builder.player2 == null) ? 
           ConnectFourComputerPlayer.getComputerPlayer() 
@@ -110,7 +110,7 @@ public class ConnectFourModel implements ConnectFourSubject {
   private void initBoard() {
     for (int i = 0; i < NUM_ROWS; i++) {
       for (int j = 0; j < NUM_COLUMNS; j++) {
-        gameGrid[i][j] = ConnectFourColors.WHITE;
+        gameGrid[i][j] = ConnectFourColor.WHITE;
       }
     }
   }
@@ -153,7 +153,7 @@ public class ConnectFourModel implements ConnectFourSubject {
     }
     int rowAvailable = -1;
     for (int row = NUM_ROWS - 1; row >=0; row--) {
-      if (gameGrid[row][column].equals(ConnectFourColors.WHITE)) {
+      if (gameGrid[row][column].equals(ConnectFourColor.WHITE)) {
         gameGrid[row][column] = playerTurn.getColor();
         rowAvailable = row;
         break;
@@ -181,7 +181,7 @@ public class ConnectFourModel implements ConnectFourSubject {
       throw new IllegalArgumentException(
           "Column index must be between 0 and 6 (inclusive)");
     }
-    ConnectFourColors pieceColor = playerTurn.getColor();
+    ConnectFourColor pieceColor = playerTurn.getColor();
     if ((column - 1 > -1) && (column - 2 > -1) && (column - 3 > -1)) {
       if (gameGrid[row][column - 1].equals(pieceColor) &&
           gameGrid[row][column - 2].equals(pieceColor) &&
@@ -295,7 +295,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * or greater than 6.
    */
   private ConnectFourPosition checkForWinningComputerMove(
-      int columnNum, ConnectFourColors compColor) {
+      int columnNum, ConnectFourColor compColor) {
     if (columnNum < 0 || columnNum > 6) {
       throw new IllegalArgumentException(
           "Column index must be between 0 and 6 (inclusive)");
@@ -323,7 +323,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * or greater than 6.
    */
   private ConnectFourPosition checkXInARow(
-      int columnNum, ConnectFourColors compColor) {
+      int columnNum, ConnectFourColor compColor) {
     if (columnNum < 0 || columnNum > 6) {
       throw new IllegalArgumentException(
           "Column index must be between 0 and 6 (inclusive)");
@@ -347,8 +347,8 @@ public class ConnectFourModel implements ConnectFourSubject {
    */
   ConnectFourPosition computerPlayerMove() {
     int columnNum = -1;
-    ConnectFourColors compColor = playerTurn.getColor();
-    ConnectFourColors humanColor = (playerTurn.equals(player1)) ? 
+    ConnectFourColor compColor = playerTurn.getColor();
+    ConnectFourColor humanColor = (playerTurn.equals(player1)) ? 
         player2.getColor() : player1.getColor();
     columnNum = checkXInARowVertical(3, compColor);
     if (columnNum != -1) {
@@ -520,7 +520,7 @@ public class ConnectFourModel implements ConnectFourSubject {
     int rowZero = 0;
     boolean full = true;
     for (int col = 0; col < NUM_COLUMNS; col++) {
-      if (gameGrid[rowZero][col].equals(ConnectFourColors.WHITE)){
+      if (gameGrid[rowZero][col].equals(ConnectFourColor.WHITE)){
         full = false;
         break;
       }
@@ -544,7 +544,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * -1 if not found.
    * @throws IllegalArgumentException if count is less than 1.
    */
-  int checkXInARowVertical(int count, ConnectFourColors color) {
+  int checkXInARowVertical(int count, ConnectFourColor color) {
     if (count < 1) {
       throw new IllegalArgumentException("Count must be greater than 0");
     }
@@ -558,7 +558,7 @@ public class ConnectFourModel implements ConnectFourSubject {
           }
         }
         if (xInARow == count && gameGrid[row - count][col].equals(
-            ConnectFourColors.WHITE)) {
+            ConnectFourColor.WHITE)) {
           return col;
         }
       }
@@ -576,7 +576,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * available to add 1 to X. -1 otherwise.
    * @throws IllegalArgumentException if count is less than 1.
    */
-  int checkXInARowHorizontal(int count, ConnectFourColors color) {
+  int checkXInARowHorizontal(int count, ConnectFourColor color) {
     if (count < 1) {
       throw new IllegalArgumentException("Count must be greater than 0");
     }
@@ -590,10 +590,10 @@ public class ConnectFourModel implements ConnectFourSubject {
           }
         }
         if (xInARow == count) { 
-          if (gameGrid[row][col + count].equals(ConnectFourColors.WHITE)) {
+          if (gameGrid[row][col + count].equals(ConnectFourColor.WHITE)) {
             if (row + 1 < NUM_ROWS) {
               if (!gameGrid[row + 1][col + count].equals(
-                  ConnectFourColors.WHITE)) {
+                  ConnectFourColor.WHITE)) {
                 return col + count;
               }
             } else {
@@ -601,10 +601,10 @@ public class ConnectFourModel implements ConnectFourSubject {
             }
           }
           if (col > 0 && gameGrid[row][col - 1].equals(
-              ConnectFourColors.WHITE)) {
+              ConnectFourColor.WHITE)) {
             if (row + 1 < NUM_ROWS) {
               if (!gameGrid[row + 1][col - 1].equals(
-                  ConnectFourColors.WHITE)) {
+                  ConnectFourColor.WHITE)) {
                 return col - 1;
               }
             } else {
@@ -625,7 +625,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * @param color the color of the pieces to be searched.
    * @return the column of the white space. -1 if it does not exist.
    */
-  int checkThreeHorizontalWithMiddleEmpty(ConnectFourColors color) {
+  int checkThreeHorizontalWithMiddleEmpty(ConnectFourColor color) {
     int middleCol = 4;
     int piecesNeeded = 4;
     for (int row = NUM_ROWS - 1; row > 0; row--) {
@@ -636,9 +636,9 @@ public class ConnectFourModel implements ConnectFourSubject {
         for (int x = 0; x < piecesNeeded; x++) {
           if (gameGrid[row][col + x].equals(color)) {
             xInARow += 1;
-          } else if(gameGrid[row][col + x].equals(ConnectFourColors.WHITE)) {
+          } else if(gameGrid[row][col + x].equals(ConnectFourColor.WHITE)) {
             if (row + 1 < NUM_ROWS) {
-              if(!gameGrid[row + 1][col + x].equals(ConnectFourColors.WHITE)) {
+              if(!gameGrid[row + 1][col + x].equals(ConnectFourColor.WHITE)) {
                 emptySpot += 1;
                 emptySpotCol = col + x;
                 if (emptySpot > 1) {
@@ -673,7 +673,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * available to add 1 to X. -1 otherwise.
    * @throws IllegalArgumentException if count is less than 1.
    */
-  int checkXInARowPositiveDiagonal(int count, ConnectFourColors color) {
+  int checkXInARowPositiveDiagonal(int count, ConnectFourColor color) {
     if (count < 1) {
       throw new IllegalArgumentException("Count must be greater than 0");
     }
@@ -691,17 +691,17 @@ public class ConnectFourModel implements ConnectFourSubject {
         if (xInARow == count) {
           if (row - count > -1 && col + count < NUM_COLUMNS) {
             if (!(gameGrid[row - count + 1][col + count].
-                equals(ConnectFourColors.WHITE)) && 
+                equals(ConnectFourColor.WHITE)) && 
                 gameGrid[row - count][col + count].
-                equals(ConnectFourColors.WHITE)) {
+                equals(ConnectFourColor.WHITE)) {
               return col + count;
             }
           }
           if (col > 0 && row < NUM_ROWS - 1 && gameGrid[row + 1][col - 1].
-              equals(ConnectFourColors.WHITE)) {
+              equals(ConnectFourColor.WHITE)) {
             if (row + 2 < NUM_ROWS) {
               if (!gameGrid[row + 2][col - 1].
-                  equals(ConnectFourColors.WHITE)) {
+                  equals(ConnectFourColor.WHITE)) {
                 return col - 1;
               }
             } else {
@@ -722,7 +722,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * @param color the color of the pieces to be searched.
    * @return the column of the white space. -1 if it does not exist.
    */
-  int checkThreePosDiagonalWithMiddleEmpty(ConnectFourColors color) {
+  int checkThreePosDiagonalWithMiddleEmpty(ConnectFourColor color) {
     int piecesNeeded = 4;
     for (int col = 0; col < NUM_COLUMNS; col++) {
       for (int row = NUM_ROWS - 1; row >= 0; row--) {
@@ -735,9 +735,9 @@ public class ConnectFourModel implements ConnectFourSubject {
           }
           if (gameGrid[row - x][col + x].equals(color)) {
             xInARow += 1;
-          } else if (gameGrid[row - x][col + x].equals(ConnectFourColors.WHITE)) {
+          } else if (gameGrid[row - x][col + x].equals(ConnectFourColor.WHITE)) {
             if (row - x + 1 < NUM_ROWS) {
-              if (!gameGrid[row - x + 1][col + x].equals(ConnectFourColors.WHITE)) {
+              if (!gameGrid[row - x + 1][col + x].equals(ConnectFourColor.WHITE)) {
                 emptySpot += 1;
                 emptySpotCol = col + x;
                 if (emptySpot > 1) {
@@ -772,7 +772,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * available to add 1 to X. -1 otherwise.
    * @throws IllegalArgumentException if count is less than 1.
    */
-  int checkXInARowNegativeDiagonal(int count, ConnectFourColors color) {
+  int checkXInARowNegativeDiagonal(int count, ConnectFourColor color) {
     if (count < 1) {
       throw new IllegalArgumentException("Count must be greater than 0");
     }
@@ -791,22 +791,22 @@ public class ConnectFourModel implements ConnectFourSubject {
           if (row + count < NUM_ROWS && col + count < NUM_COLUMNS) {
             if (row + count + 1 < NUM_ROWS) {
               if (!gameGrid[row + count + 1][col + count].
-                  equals(ConnectFourColors.WHITE) && 
+                  equals(ConnectFourColor.WHITE) && 
                   gameGrid[row + count][col + count].
-                  equals(ConnectFourColors.WHITE)) {
+                  equals(ConnectFourColor.WHITE)) {
                 return col + count; 
               }
             } else {
               if (gameGrid[row + count][col + count].
-                  equals(ConnectFourColors.WHITE)) {
+                  equals(ConnectFourColor.WHITE)) {
                 return col + count; 
               }
             }
           } 
           if (row > 0 && col > 0 && !gameGrid[row][col - 1].
-              equals(ConnectFourColors.WHITE) && 
+              equals(ConnectFourColor.WHITE) && 
               gameGrid[row - 1][col - 1].
-              equals(ConnectFourColors.WHITE)) {
+              equals(ConnectFourColor.WHITE)) {
             return col - 1;
           }
         }
@@ -823,7 +823,7 @@ public class ConnectFourModel implements ConnectFourSubject {
    * @param color the color of the pieces to be searched.
    * @return the column of the white space. -1 if it does not exist.
    */
-  int checkThreeNegDiagonalWithMiddleEmpty(ConnectFourColors color) {
+  int checkThreeNegDiagonalWithMiddleEmpty(ConnectFourColor color) {
     int piecesNeeded = 4;
     for (int col = 0; col < NUM_COLUMNS; col++) {
       for (int row = 0; row < NUM_ROWS; row++) {
@@ -836,9 +836,9 @@ public class ConnectFourModel implements ConnectFourSubject {
           }
           if (gameGrid[row + x][col + x].equals(color)) {
             xInARow += 1;
-          } else if (gameGrid[row + x][col + x].equals(ConnectFourColors.WHITE)) {
+          } else if (gameGrid[row + x][col + x].equals(ConnectFourColor.WHITE)) {
             if (row + x + 1 < NUM_ROWS) { 
-              if (!gameGrid[row + x + 1][col + x].equals(ConnectFourColors.WHITE)) {
+              if (!gameGrid[row + x + 1][col + x].equals(ConnectFourColor.WHITE)) {
                 emptySpot += 1;
                 emptySpotCol = col + x;
                 if (emptySpot > 1) {
@@ -887,9 +887,9 @@ public class ConnectFourModel implements ConnectFourSubject {
 
   @Override
   public void notifyObserversUpdateBoardDisplay(int row, int column, 
-      ConnectFourColors playerTurnColor) {
+      ConnectFourColor playerTurnColor) {
     Color color;
-    if (playerTurnColor.equals(ConnectFourColors.RED)) {
+    if (playerTurnColor.equals(ConnectFourColor.RED)) {
       color = Color.RED; 
     } else {
       color = Color.BLACK;

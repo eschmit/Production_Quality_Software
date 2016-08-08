@@ -17,13 +17,13 @@ public class ConnectFourModelTest {
   @Before
   public void setUp() {
     psuedoOnePlayerGame = new ConnectFourModel.Builder(
-        ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColors.RED)).
+        ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColor.RED)).
         secondPlayer(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColors.BLACK)).build();
+        getHumanPlayer(ConnectFourColor.BLACK)).build();
     twoPlayerGame = new ConnectFourModel.Builder(
-        ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColors.RED)).
+        ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColor.RED)).
         secondPlayer(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColors.BLACK)).build();
+        getHumanPlayer(ConnectFourColor.BLACK)).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -34,15 +34,15 @@ public class ConnectFourModelTest {
   @Test(expected = IllegalArgumentException.class)
   public void testConnectFour_nullSecondParameter() {
     new ConnectFourModel.Builder(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColors.RED)).secondPlayer(null).build();
+        getHumanPlayer(ConnectFourColor.RED)).secondPlayer(null).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testConnectFour_sameColor() {
     new ConnectFourModel.Builder(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColors.RED)).
+        getHumanPlayer(ConnectFourColor.RED)).
         secondPlayer(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColors.RED)).build();
+        getHumanPlayer(ConnectFourColor.RED)).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -180,57 +180,57 @@ public class ConnectFourModelTest {
   @Test
   public void testCheckXInARowVertical() {
     twoPlayerGameMoves(3);
-    assertEquals(3, twoPlayerGame.checkXInARowVertical(1, ConnectFourColors.RED));
+    assertEquals(3, twoPlayerGame.checkXInARowVertical(1, ConnectFourColor.RED));
     //check wrong column to test
-    assertThat(2, not(equalTo(twoPlayerGame.checkXInARowVertical(1, ConnectFourColors.RED))));
+    assertThat(2, not(equalTo(twoPlayerGame.checkXInARowVertical(1, ConnectFourColor.RED))));
     //check if two in a row. Returns -1 since false
-    assertEquals(-1, twoPlayerGame.checkXInARowVertical(2, ConnectFourColors.RED));
-    assertEquals(-1, twoPlayerGame.checkXInARowVertical(1, ConnectFourColors.BLACK));
+    assertEquals(-1, twoPlayerGame.checkXInARowVertical(2, ConnectFourColor.RED));
+    assertEquals(-1, twoPlayerGame.checkXInARowVertical(1, ConnectFourColor.BLACK));
     twoPlayerGameMoves(4, 3);
-    assertEquals(3, twoPlayerGame.checkXInARowVertical(2, ConnectFourColors.RED));
-    assertEquals(4, twoPlayerGame.checkXInARowVertical(1, ConnectFourColors.BLACK));
+    assertEquals(3, twoPlayerGame.checkXInARowVertical(2, ConnectFourColor.RED));
+    assertEquals(4, twoPlayerGame.checkXInARowVertical(1, ConnectFourColor.BLACK));
     twoPlayerGameMoves(4, 3);
-    assertEquals(3, twoPlayerGame.checkXInARowVertical(3, ConnectFourColors.RED));
-    assertEquals(4, twoPlayerGame.checkXInARowVertical(2, ConnectFourColors.BLACK));
+    assertEquals(3, twoPlayerGame.checkXInARowVertical(3, ConnectFourColor.RED));
+    assertEquals(4, twoPlayerGame.checkXInARowVertical(2, ConnectFourColor.BLACK));
   }
 
   @Test
   public void testCheckXInARowHorizontal() {
     twoPlayerGameMoves(0);
-    assertEquals(1, twoPlayerGame.checkXInARowHorizontal(1, ConnectFourColors.RED));
+    assertEquals(1, twoPlayerGame.checkXInARowHorizontal(1, ConnectFourColor.RED));
     //check if two in a row. Returns -1 since false
-    assertEquals(-1, twoPlayerGame.checkXInARowHorizontal(2, ConnectFourColors.RED));
+    assertEquals(-1, twoPlayerGame.checkXInARowHorizontal(2, ConnectFourColor.RED));
     twoPlayerGameMoves(0, 1);
-    assertEquals(2, twoPlayerGame.checkXInARowHorizontal(2, ConnectFourColors.RED));
-    assertEquals(1, twoPlayerGame.checkXInARowHorizontal(1, ConnectFourColors.BLACK));
+    assertEquals(2, twoPlayerGame.checkXInARowHorizontal(2, ConnectFourColor.RED));
+    assertEquals(1, twoPlayerGame.checkXInARowHorizontal(1, ConnectFourColor.BLACK));
     twoPlayerGameMoves(1, 2);
-    assertEquals(3, twoPlayerGame.checkXInARowHorizontal(3, ConnectFourColors.RED));
-    assertEquals(2, twoPlayerGame.checkXInARowHorizontal(2, ConnectFourColors.BLACK));
+    assertEquals(3, twoPlayerGame.checkXInARowHorizontal(3, ConnectFourColor.RED));
+    assertEquals(2, twoPlayerGame.checkXInARowHorizontal(2, ConnectFourColor.BLACK));
   }
 
   @Test
   public void testCheckXInARowPositiveDiagonal() {
     twoPlayerGameMoves(3);
-    assertEquals(-1, twoPlayerGame.checkXInARowPositiveDiagonal(1, ConnectFourColors.RED));
-    assertEquals(-1, twoPlayerGame.checkXInARowPositiveDiagonal(1, ConnectFourColors.BLACK));
+    assertEquals(-1, twoPlayerGame.checkXInARowPositiveDiagonal(1, ConnectFourColor.RED));
+    assertEquals(-1, twoPlayerGame.checkXInARowPositiveDiagonal(1, ConnectFourColor.BLACK));
     twoPlayerGameMoves(4, 4);
     //Two red in a row but red can't make 3 in a row yet 
-    assertEquals(-1, twoPlayerGame.checkXInARowPositiveDiagonal(2, ConnectFourColors.RED));
+    assertEquals(-1, twoPlayerGame.checkXInARowPositiveDiagonal(2, ConnectFourColor.RED));
     twoPlayerGameMoves(5, 5, 3, 0);
     //Two red in a row for black to block
-    assertEquals(5, twoPlayerGame.checkXInARowPositiveDiagonal(2, ConnectFourColors.RED));
+    assertEquals(5, twoPlayerGame.checkXInARowPositiveDiagonal(2, ConnectFourColor.RED));
   }
 
   @Test
   public void testCheckXInARowNegativeDiagonal() {
     twoPlayerGameMoves(3);
-    assertEquals(-1, twoPlayerGame.checkXInARowNegativeDiagonal(1, ConnectFourColors.RED));
+    assertEquals(-1, twoPlayerGame.checkXInARowNegativeDiagonal(1, ConnectFourColor.RED));
     twoPlayerGameMoves(2, 2);
     //Two red in a row but red can't make 3 in a row yet
-    assertEquals(-1, twoPlayerGame.checkXInARowPositiveDiagonal(2, ConnectFourColors.RED));
+    assertEquals(-1, twoPlayerGame.checkXInARowPositiveDiagonal(2, ConnectFourColor.RED));
     twoPlayerGameMoves(1, 1, 3, 6);
     //Two red in a row for black to block
-    assertEquals(1, twoPlayerGame.checkXInARowNegativeDiagonal(2, ConnectFourColors.RED));
+    assertEquals(1, twoPlayerGame.checkXInARowNegativeDiagonal(2, ConnectFourColor.RED));
   }
 
   private void onePlayerGameMoves(int...column) {

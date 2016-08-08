@@ -12,17 +12,17 @@ package edu.nyu.pqs.connectfour;
  * black and one red.
  * @author Eric
  * @see ConnectFourPlayer
- * @see ConnectFourColors
+ * @see ConnectFourColor
  * @see PlayerType
  * 
  */
 public class ConnectFourHumanPlayer extends ConnectFourPlayer {
   private static final PlayerType type = PlayerType.HUMAN;
-  private final ConnectFourColors color;
+  private final ConnectFourColor color;
   private static ConnectFourPlayer player1;
   private static ConnectFourPlayer player2;
 		  
-  private ConnectFourHumanPlayer(ConnectFourColors color) {
+  private ConnectFourHumanPlayer(ConnectFourColor color) {
     super();
     this.color = color;
   }
@@ -36,7 +36,7 @@ public class ConnectFourHumanPlayer extends ConnectFourPlayer {
    * @param color the color of the player.
    * @return a ConnectFourPlayer object.
    */
-  public static ConnectFourPlayer getHumanPlayer(ConnectFourColors color) {
+  public static ConnectFourPlayer getHumanPlayer(ConnectFourColor color) {
     if (player1 == null) {
       player1 = new ConnectFourHumanPlayer(color);
       return player1;
@@ -52,7 +52,7 @@ public class ConnectFourHumanPlayer extends ConnectFourPlayer {
   }
 
   @Override 
-  public ConnectFourColors getColor() {
+  public ConnectFourColor getColor() {
     return color;
   }
 

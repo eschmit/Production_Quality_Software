@@ -10,11 +10,11 @@ public class ConnectFourHumanPlayerTest {
   @Test
   public void testNumberOfHumanPlayers() {
     ConnectFourPlayer redPlayer1  = ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColors.RED);
+        getHumanPlayer(ConnectFourColor.RED);
     ConnectFourPlayer blackPlayer1  = ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColors.BLACK);
+        getHumanPlayer(ConnectFourColor.BLACK);
     ConnectFourPlayer redPlayer2  = ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColors.RED);
+        getHumanPlayer(ConnectFourColor.RED);
     assertNotSame(redPlayer1, blackPlayer1);
     assertSame(redPlayer1, redPlayer2);
   }

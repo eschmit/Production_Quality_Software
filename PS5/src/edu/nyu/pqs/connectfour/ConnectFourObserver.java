@@ -25,7 +25,7 @@ public interface ConnectFourObserver {
    * color won.
    * @param winnerColor the color of the winning player.
    */
-  void gameOver(ConnectFourColors winnerColor);
+  void gameOver(ConnectFourColor winnerColor);
 
   /**
    * Presents a menu stating that the board is full and

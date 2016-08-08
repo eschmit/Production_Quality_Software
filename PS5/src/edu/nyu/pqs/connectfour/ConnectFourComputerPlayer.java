@@ -12,7 +12,7 @@ package edu.nyu.pqs.connectfour;
  */
 public class ConnectFourComputerPlayer extends ConnectFourPlayer {
   private static final PlayerType type = PlayerType.COMPUTER;
-  private static final ConnectFourColors color = ConnectFourColors.BLACK;
+  private static final ConnectFourColor color = ConnectFourColor.BLACK;
   private static final ConnectFourComputerPlayer INSTANCE =
       new ConnectFourComputerPlayer();
 
@@ -30,7 +30,7 @@ public class ConnectFourComputerPlayer extends ConnectFourPlayer {
   }
 
   @Override
-  public ConnectFourColors getColor() {
+  public ConnectFourColor getColor() {
     return color;
   }
 

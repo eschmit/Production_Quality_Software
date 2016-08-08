@@ -138,7 +138,7 @@ public class ConnectFourView implements ConnectFourObserver {
   }
 
   @Override
-  public void gameOver(ConnectFourColors winnerColor) {
+  public void gameOver(ConnectFourColor winnerColor) {
     JFrame menuFrame = new JFrame("Game Over");
     JPanel menuPanel = new JPanel();
     JPanel buttonPanel = new JPanel();
@@ -254,12 +254,12 @@ public class ConnectFourView implements ConnectFourObserver {
     public void actionPerformed(ActionEvent e) {
       if (numPlayers == 2) {
         connectFour = new ConnectFourModel.Builder(ConnectFourHumanPlayer.
-            getHumanPlayer(ConnectFourColors.RED)).
+            getHumanPlayer(ConnectFourColor.RED)).
             secondPlayer(ConnectFourHumanPlayer.
-            getHumanPlayer(ConnectFourColors.BLACK)).build();
+            getHumanPlayer(ConnectFourColor.BLACK)).build();
       } else {
         connectFour = new ConnectFourModel.Builder(ConnectFourHumanPlayer.
-            getHumanPlayer(ConnectFourColors.RED))
+            getHumanPlayer(ConnectFourColor.RED))
             .secondPlayer(ConnectFourComputerPlayer.
             getComputerPlayer()).build(); 
       }

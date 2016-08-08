@@ -15,7 +15,7 @@ public abstract class ConnectFourPlayer {
    * Gets the piece color of the connect four player.
    * @return the piece color of the connect four player.
    */
-  public abstract ConnectFourColors getColor();
+  public abstract ConnectFourColor getColor();
 
   /**
    * Gets the PlayerType of the connect four player.
