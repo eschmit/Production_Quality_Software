@@ -16,6 +16,6 @@ public class ConnectFourHumanPlayerTest {
     ConnectFourPlayer redPlayer2  = ConnectFourHumanPlayer.
         getHumanPlayer(ConnectFourColors.RED);
     assertNotSame(redPlayer1, blackPlayer1);
-    assertSame(redPlayer1,redPlayer2);
+    assertSame(redPlayer1, redPlayer2);
   }
 }

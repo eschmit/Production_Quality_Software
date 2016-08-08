@@ -91,7 +91,7 @@ public class ConnectFourModel implements ConnectFourSubject {
     gameGrid = new ConnectFourColors[NUM_ROWS][NUM_COLUMNS];
     player1 = builder.player1;
     if (player1.getPlayerType().equals(PlayerType.COMPUTER) && 
-        builder.player2 == null ) {
+        builder.player2 == null) {
       player2 = ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColors.RED);
     } else {
       player2 = ((builder.player2 == null) ? 
@@ -182,7 +182,7 @@ public class ConnectFourModel implements ConnectFourSubject {
           "Column index must be between 0 and 6 (inclusive)");
     }
     ConnectFourColors pieceColor = playerTurn.getColor();
-    if ( (column - 1 > -1) && (column - 2 > -1) && (column - 3 > -1) ) {
+    if ((column - 1 > -1) && (column - 2 > -1) && (column - 3 > -1)) {
       if (gameGrid[row][column - 1].equals(pieceColor) &&
           gameGrid[row][column - 2].equals(pieceColor) &&
           gameGrid[row][column - 3].equals(pieceColor)) {
@@ -190,7 +190,7 @@ public class ConnectFourModel implements ConnectFourSubject {
       }
     }
     //check to bottom of [row][column]
-    if ( (row + 1 < 6) && (row + 2 < 6) && (row + 3 < 6) ) {
+    if ((row + 1 < 6) && (row + 2 < 6) && (row + 3 < 6)) {
       if (gameGrid[row + 1][column].equals(pieceColor) &&
           gameGrid[row + 2][column].equals(pieceColor) &&
           gameGrid[row + 3][column].equals(pieceColor)) {
@@ -198,7 +198,7 @@ public class ConnectFourModel implements ConnectFourSubject {
       }
     }
     //check to right of [row][column]
-    if ( (column + 1 < 7) && (column + 2 < 7) && (column + 3 < 7) ) {
+    if ((column + 1 < 7) && (column + 2 < 7) && (column + 3 < 7)) {
       if (gameGrid[row][column + 1].equals(pieceColor) &&
           gameGrid[row][column + 2].equals(pieceColor) &&
           gameGrid[row][column + 3].equals(pieceColor)) {
@@ -206,7 +206,7 @@ public class ConnectFourModel implements ConnectFourSubject {
       }
     }
     //check top of [row][column]
-    if ( (row - 1 > -1) && (row - 2 > -1) && (row - 3 > -1) ) {
+    if ((row - 1 > -1) && (row - 2 > -1) && (row - 3 > -1)) {
       if (gameGrid[row - 1][column].equals(pieceColor) &&
           gameGrid[row - 2][column].equals(pieceColor) &&
           gameGrid[row - 3][column].equals(pieceColor)) {
@@ -214,8 +214,8 @@ public class ConnectFourModel implements ConnectFourSubject {
       }
     }
     //diagonal up left.
-    if ( (column - 1 > -1) && (column - 2 > -1) && (column - 3 > -1) &&
-        (row - 1 > -1) && (row - 2 > -1) && (row - 3 > -1) ) {
+    if ((column - 1 > -1) && (column - 2 > -1) && (column - 3 > -1) &&
+        (row - 1 > -1) && (row - 2 > -1) && (row - 3 > -1)) {
       if (gameGrid[row - 1][column - 1].equals(pieceColor) &&
           gameGrid[row - 2][column - 2].equals(pieceColor) &&
           gameGrid[row - 3][column - 3].equals(pieceColor)) {
@@ -223,8 +223,8 @@ public class ConnectFourModel implements ConnectFourSubject {
       }
     }
     //diagonal down left
-    if ( (column - 1 > -1) && (column - 2 > -1) && (column - 3 > -1) &&
-        (row + 1 < 6) && (row + 2 < 6) && (row + 3 < 6) ) {
+    if ((column - 1 > -1) && (column - 2 > -1) && (column - 3 > -1) &&
+        (row + 1 < 6) && (row + 2 < 6) && (row + 3 < 6)) {
       if (gameGrid[row + 1][column - 1].equals(pieceColor) &&
           gameGrid[row + 2][column - 2].equals(pieceColor) &&
           gameGrid[row + 3][column - 3].equals(pieceColor)) {
@@ -232,8 +232,8 @@ public class ConnectFourModel implements ConnectFourSubject {
       }
     }
     //diagonal up right
-    if ( (column + 1 < 7) && (column + 2 < 7) && (column + 3 < 7) &&
-        (row - 1 > -1) && (row - 2 > -1) && (row - 3 > -1) ) {
+    if ((column + 1 < 7) && (column + 2 < 7) && (column + 3 < 7) &&
+        (row - 1 > -1) && (row - 2 > -1) && (row - 3 > -1)) {
       if (gameGrid[row - 1][column + 1].equals(pieceColor) &&
           gameGrid[row - 2][column + 2].equals(pieceColor) &&
           gameGrid[row - 3][column + 3].equals(pieceColor)) {
@@ -241,8 +241,8 @@ public class ConnectFourModel implements ConnectFourSubject {
       }
     }
     //diagonal down right
-    if ( (column + 1 < 7) && (column + 2 < 7) && (column + 3 < 7) &&
-        (row + 1 < 6) && (row + 2 < 6) && (row + 3 < 6) ) {
+    if ((column + 1 < 7) && (column + 2 < 7) && (column + 3 < 7) &&
+        (row + 1 < 6) && (row + 2 < 6) && (row + 3 < 6)) {
       if (gameGrid[row + 1][column + 1].equals(pieceColor) &&
           gameGrid[row + 2][column + 2].equals(pieceColor) &&
           gameGrid[row + 3][column + 3].equals(pieceColor)) {
@@ -357,13 +357,6 @@ public class ConnectFourModel implements ConnectFourSubject {
         return position;
       }
     }
-    columnNum = checkXInARowVertical(3, humanColor);
-    if (columnNum != -1) {
-      ConnectFourPosition position = checkXInARow(columnNum, compColor);
-      if (position.column != -1) {
-        return position;
-      }
-    }
     columnNum = checkXInARowHorizontal(3, compColor);
     if (columnNum != -1) {
       ConnectFourPosition position = checkForWinningComputerMove(columnNum, compColor);
@@ -375,20 +368,6 @@ public class ConnectFourModel implements ConnectFourSubject {
     columnNum = checkThreeHorizontalWithMiddleEmpty(compColor);
     if (columnNum != -1) {
       ConnectFourPosition position = checkForWinningComputerMove(columnNum, compColor);
-      if (position.column != -1) {
-        return position;
-      }
-    }
-    columnNum = checkXInARowHorizontal(3, humanColor);
-    if (columnNum != -1) {
-      ConnectFourPosition position = checkXInARow(columnNum, compColor);
-      if (position.column != -1) {
-        return position;
-      }
-    }
-    columnNum = checkThreeHorizontalWithMiddleEmpty(humanColor);
-    if (columnNum != -1) {
-      ConnectFourPosition position = checkXInARow(columnNum, compColor);
       if (position.column != -1) {
         return position;
       }
@@ -407,20 +386,6 @@ public class ConnectFourModel implements ConnectFourSubject {
         return position;
       }
     }
-    columnNum = checkXInARowPositiveDiagonal(3, humanColor);
-    if (columnNum != -1) {
-      ConnectFourPosition position = checkXInARow(columnNum, compColor);
-      if (position.column != -1) {
-        return position;
-      }
-    }
-    columnNum = checkThreePosDiagonalWithMiddleEmpty(humanColor);
-    if (columnNum != -1) {
-      ConnectFourPosition position = checkXInARow(columnNum, compColor);
-      if (position.column != -1) {
-        return position;
-      }
-    }
     columnNum = checkXInARowNegativeDiagonal(3, compColor);
     if (columnNum != -1) {
       ConnectFourPosition position = checkForWinningComputerMove(columnNum, compColor);
@@ -431,6 +396,41 @@ public class ConnectFourModel implements ConnectFourSubject {
     columnNum = checkThreeNegDiagonalWithMiddleEmpty(compColor);
     if (columnNum != -1) {
       ConnectFourPosition position = checkForWinningComputerMove(columnNum, compColor);
+      if (position.column != -1) {
+        return position;
+      }
+    }
+    columnNum = checkXInARowVertical(3, humanColor);
+    if (columnNum != -1) {
+      ConnectFourPosition position = checkXInARow(columnNum, compColor);
+      if (position.column != -1) {
+        return position;
+      }
+    }
+    columnNum = checkXInARowHorizontal(3, humanColor);
+    if (columnNum != -1) {
+      ConnectFourPosition position = checkXInARow(columnNum, compColor);
+      if (position.column != -1) {
+        return position;
+      }
+    }
+    columnNum = checkThreeHorizontalWithMiddleEmpty(humanColor);
+    if (columnNum != -1) {
+      ConnectFourPosition position = checkXInARow(columnNum, compColor);
+      if (position.column != -1) {
+        return position;
+      }
+    }
+    columnNum = checkXInARowPositiveDiagonal(3, humanColor);
+    if (columnNum != -1) {
+      ConnectFourPosition position = checkXInARow(columnNum, compColor);
+      if (position.column != -1) {
+        return position;
+      }
+    }
+    columnNum = checkThreePosDiagonalWithMiddleEmpty(humanColor);
+    if (columnNum != -1) {
+      ConnectFourPosition position = checkXInARow(columnNum, compColor);
       if (position.column != -1) {
         return position;
       }
@@ -520,7 +520,7 @@ public class ConnectFourModel implements ConnectFourSubject {
     int rowZero = 0;
     boolean full = true;
     for (int col = 0; col < NUM_COLUMNS; col++) {
-      if (gameGrid[rowZero][col].equals(ConnectFourColors.WHITE)  ){
+      if (gameGrid[rowZero][col].equals(ConnectFourColors.WHITE)){
         full = false;
         break;
       }

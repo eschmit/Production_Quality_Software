@@ -181,7 +181,9 @@ public class ConnectFourModelTest {
   public void testCheckXInARowVertical() {
     twoPlayerGameMoves(3);
     assertEquals(3, twoPlayerGame.checkXInARowVertical(1, ConnectFourColors.RED));
+    //check wrong column to test
     assertThat(2, not(equalTo(twoPlayerGame.checkXInARowVertical(1, ConnectFourColors.RED))));
+    //check if two in a row. Returns -1 since false
     assertEquals(-1, twoPlayerGame.checkXInARowVertical(2, ConnectFourColors.RED));
     assertEquals(-1, twoPlayerGame.checkXInARowVertical(1, ConnectFourColors.BLACK));
     twoPlayerGameMoves(4, 3);
@@ -196,6 +198,7 @@ public class ConnectFourModelTest {
   public void testCheckXInARowHorizontal() {
     twoPlayerGameMoves(0);
     assertEquals(1, twoPlayerGame.checkXInARowHorizontal(1, ConnectFourColors.RED));
+    //check if two in a row. Returns -1 since false
     assertEquals(-1, twoPlayerGame.checkXInARowHorizontal(2, ConnectFourColors.RED));
     twoPlayerGameMoves(0, 1);
     assertEquals(2, twoPlayerGame.checkXInARowHorizontal(2, ConnectFourColors.RED));
@@ -243,7 +246,7 @@ public class ConnectFourModelTest {
     psuedoOnePlayerGame.playerMove(0);
     psuedoOnePlayerGame.playerMove(3);
     ConnectFourModel.ConnectFourPosition position = psuedoOnePlayerGame.computerPlayerMove();
-    assertEquals(3,position.column);
+    assertEquals(3, position.column);
   }
 
   @Test
@@ -253,7 +256,7 @@ public class ConnectFourModelTest {
     psuedoOnePlayerGame.playerMove(0);
     psuedoOnePlayerGame.playerMove(4);
     ConnectFourModel.ConnectFourPosition position = psuedoOnePlayerGame.computerPlayerMove();
-    assertEquals(5,position.column);
+    assertEquals(5, position.column);
   }
 
   @Test
