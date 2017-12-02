@@ -54,20 +54,19 @@ public class AddressBook {
    * {@code addContact} is not thread-safe.
    * @param contact the {@code Contact} object to be added to the Address Book.
    * @return true if the contact is successfully added; false otherwise.
+   * @throws NullPointerException if {@code Contact} is null.
    */
 	
   public boolean addContact(Contact contact) { 
     /*Contact is immutable. Don't need to use Defensive Copy */
     if (contact == null) {
-      return false;	
+      throw new NullPointerException("contact cannot be null");
     }
-    //insert contact into AddressBook
-    int index = getContactListInsertionIndex(contactsList, contact);
-    if (index == -1) {
-      //Contact already exists in addressBook	
+    if (contactsList.contains(contact)) {	
       return false;	
     } else {
-      contactsList.add(index, contact);
+      contactsList.add(contact);
+      Collections.sort(contactsList);
       return true;
     }
   }
@@ -92,14 +91,14 @@ public class AddressBook {
    */
   
   public List<Contact> searchContactsList(String searchString) {
-    List<Contact> matchingContacts = new ArrayList<Contact>();
-    if (searchString.isEmpty() || searchString == null) {
-      return matchingContacts;	
+	if (searchString.isEmpty() || searchString == null) {
+      return Collections.emptyList();	
     }
+	List<Contact> matchingContacts = new ArrayList<Contact>();
     String lowerCaseSearchString = searchString.toLowerCase();
     char firstChar = searchString.charAt(0);
     String number;
-    if (Contact.isOperand(firstChar) || firstChar == '+' || firstChar == '(') {
+    if (Character.isDigit(firstChar) || firstChar == '+' || firstChar == '(') {
       number = Contact.parseStringToNumberString(searchString);    	
     } else {
       number = "";	
@@ -108,71 +107,31 @@ public class AddressBook {
       //if searchString is contained within property string insert contact into 
       //matchingContacts	
       if (!number.isEmpty()) {
-        if (contact.privateGetPhoneNumber().contains(number)){
-          addContactToMatchingContacts(matchingContacts, contact);
+        if (contact.getPhoneNumber().contains(number)){
+          matchingContacts.add(contact);
           continue;
         }  	
       }
       if (contact.getName().toLowerCase().contains(lowerCaseSearchString)) {
-    	addContactToMatchingContacts(matchingContacts, contact);
+    	matchingContacts.add(contact);
         continue;
       }
       if (contact.getEmail().toLowerCase().contains(lowerCaseSearchString)){
-    	addContactToMatchingContacts(matchingContacts, contact);
+    	matchingContacts.add(contact);
         continue;
       }
       if (contact.getPostalAddress().toLowerCase().contains(lowerCaseSearchString)){
-    	addContactToMatchingContacts(matchingContacts, contact);
+    	matchingContacts.add(contact);
         continue;
       }
       if (contact.getNote().toLowerCase().contains(lowerCaseSearchString)) {
-    	addContactToMatchingContacts(matchingContacts, contact);
+    	matchingContacts.add(contact);
         continue;    	  
       }
     }
     return matchingContacts;
   }
-  
-  /**
-   * Find the index in the sorted list of contacts who match the search string where
-   * the contact to be inserted belongs and insert the contact at that position.
-   * @param matchingContacts list of contacts who match the search string.
-   * @param contact contact to be added to the list of matching contacts.
-   */
-  
-  private void addContactToMatchingContacts(List<Contact> matchingContacts,
-      Contact contact) {
-    int index = getContactListInsertionIndex(matchingContacts, contact);
-    matchingContacts.add(index, contact);	  
-  }
-  
-  /**
-   * Return the index in the provided sorted list of contacts where the contact
-   * to be inserted into the list belongs. 
-   * <p>
-   * If the contact already exists in the provided list of contacts return -1.
-   * <p>
-   * This method is used by both {@code addContactToMatchingContacts()} and 
-   * {@code addContact()}
-   * @param localContacts sorted list of contacts for the provided contact to be added to.
-   * @param contact the contact to be inserted into the sorted list.
-   * @return index where contact is to be inserted into the sorted list. -1 
-   * if contact already exists in the list.
-   */
-  
-  private int getContactListInsertionIndex(List<Contact> localContacts,
-      Contact contact) {
-    for(int i = 0; i < localContacts.size(); ++i){
-      if (contact.equals(localContacts.get(i))) {
-        return -1;	  
-      }
-      if(contact.compareTo(localContacts.get(i)) < 0) {
-        return i;	  
-      }
-    }
-    return localContacts.size();
-  }
-  
+ 
   /**
    * Removes the provided contact from the Address Book.
    * <p>
@@ -183,20 +142,15 @@ public class AddressBook {
    * {@code removeContact} is not thread-safe.
    * @param contact
    * @return true if the contact is successfully removed; false otherwise.
+   * @throws NullPointerException if {@code Contact} is null.
    * @see removeContact
    */
   
   public boolean removeContact(Contact contact) {
     if (contact == null) {
-      return false;	
+      throw new NullPointerException("contact cannot be null");	
     }  
-    for (int i = 0; i < contactsList.size(); ++i) {
-      if (contact.equals(contactsList.get(i))) {
-        contactsList.remove(i);
-        return true;
-      }
-    }
-    return false;
+    return contactsList.remove(contact);
   }
   
   /**
@@ -209,15 +163,18 @@ public class AddressBook {
    * {@code removeContactAtIndex} is not thread-safe.
    * @param index index in {@code ArrayList} where contact is to be removed.
    * @return the contact that was removed. null if the {@code ArrayList} is empty.
+   * @throws IndexOutOfBoundsException if contacts list is empty.
+   * @throws IllegalArgumentException if index is negative or out of range.
    */
   
   public Contact removeContactAtIndex(int index) {
     if (contactsList.isEmpty()) {
-      return null;	
+      throw new IndexOutOfBoundsException("List of contacts is empty");
     }
-    Contact removedContact = contactsList.get(index);
-    contactsList.remove(index);
-    return removedContact;
+    if (index < 0) {
+       throw new IllegalArgumentException();
+    }
+    return contactsList.remove(index);
   }
   
   /**

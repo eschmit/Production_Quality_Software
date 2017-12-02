@@ -27,7 +27,6 @@ public final class Contact implements Comparable<Contact> {
   private final String note;
   private final PhoneNumber phoneNumber;
   private final PostalAddress postalAddress;
-  private volatile int hashCode;
   
   /**
    * The {@code Builder} class is a static class that uses the Builder pattern to create a 
@@ -68,21 +67,21 @@ public final class Contact implements Comparable<Contact> {
         String subscriberNumber) {
       this.name = ((name == null) ? "" : name);
       this.countryCode = ((countryCode == null || countryCode == "" || 
-    	  stringIsWhiteSpace(countryCode)) ? "1" : countryCode);
+    		  countryCode.trim().isEmpty() ) ? "1" : countryCode);
       this.areaCode = ((areaCode == null || areaCode == "" || 
-          stringIsWhiteSpace(areaCode)) ? "000" : areaCode);
+    		  areaCode.trim().isEmpty() ) ? "000" : areaCode);
       this.subscriberNumber = ((subscriberNumber == null || subscriberNumber == "" || 
-          stringIsWhiteSpace(subscriberNumber)) ? "0000000" : subscriberNumber);
+    		  subscriberNumber.trim().isEmpty()) ? "0000000" : subscriberNumber);
     }
     
-    private boolean stringIsWhiteSpace(String stringToCheck) {
-      for (char c: stringToCheck.toCharArray()) {
-    	if (c == ' ') {
-    	  return true;	  
-    	}
-       }
-      return false;
-    }
+//    private boolean stringIsWhiteSpace(String stringToCheck) {
+//      for (char c: stringToCheck.toCharArray()) {
+//    	if (c == ' ') {
+//    	  return true;	  
+//    	}
+//       }
+//      return false;
+//    }
 	
     /**
      * Optional method for creating a Contact object. If method not called, or parameter passed
@@ -92,7 +91,7 @@ public final class Contact implements Comparable<Contact> {
      */
     
     public Builder emailAddress(String email) { 
-      this.email = ((email == null || stringIsWhiteSpace(email))
+      this.email = ((email == null || email.trim().isEmpty())
           ? "" : email);
       return this;  
     }
@@ -112,17 +111,17 @@ public final class Contact implements Comparable<Contact> {
     public Builder postalAddress(String number, String street, String city,
         String state, String zipcode, String country) {
       this.number = ((number == null || 
-          stringIsWhiteSpace(number)) ? "" : number);
+    		  number.trim().isEmpty()) ? "" : number);
       this.street = ((street == null || 
-          stringIsWhiteSpace(street)) ? "" : street);
+    		  street.trim().isEmpty()) ? "" : street);
       this.city = ((city == null || 
-          stringIsWhiteSpace(city)) ? "" : city);
+    		  city.trim().isEmpty()) ? "" : city);
       this.state = ((state == null || 
-          stringIsWhiteSpace(state)) ? "" : state);
+    		  state.trim().isEmpty()) ? "" : state);
       this.zipcode = ((zipcode == null || 
-          stringIsWhiteSpace(zipcode)) ? "" : zipcode);
+    		  zipcode.trim().isEmpty()) ? "" : zipcode);
       this.country = ((country == null || 
-          stringIsWhiteSpace(country)) ? "" : country);
+    		  country.trim().isEmpty()) ? "" : country);
       return this;
     }
     
@@ -135,7 +134,7 @@ public final class Contact implements Comparable<Contact> {
      */
     
     public Builder note(String note) {
-      this.note = ((note == null || stringIsWhiteSpace(note))
+      this.note = ((note == null || note.trim().isEmpty())
     	  ? "" : note);
       return this;    	
     }
@@ -164,50 +163,7 @@ public final class Contact implements Comparable<Contact> {
       this.email = contact.getEmail();
       this.note = contact.getNote();
     }
-    
-    /**
-     * Used in conjunction with {@code Builder(Contact contact)} to modify a 
-     * contact's email address.
-     * @param email email address to be added to Contact
-     * @return the Builder object used to create the contact
-     */
-    
-    public Builder withEmail(String email) { 
-      this.email = ((email == null || stringIsWhiteSpace(email))
-          ? "" : email);
-      return this;  
-    }
-    
-    /**
-     * Used in conjunction with {@code Builder(Contact contact)} to modify a 
-     * contact's phone number.
-     * @param number the building number
-     * @param street the street name including direction (e.g. East), and apartment/suite/etc.
-     * @param city the name of the city
-     * @param state the name of the state 
-     * @param zipcode the applicable zipcode with or without optional digits
-     * @param country the name of the country
-     * @return the Builder object used to create the contact
-     */
-    
-    public Builder withPostalAddress(String number, String street, String city,
-        String state, String zipcode, String country) {
-      return postalAddress(number, street, city, state, zipcode, country);  
-    }
-    
-    /**
-     * Used in conjunction with {@code Builder(Contact contact)} to modify a 
-     * note about a contact.
-     * @param note any note about the contact
-     * @return the Builder object used to create the contact
-     */
-    
-    public Builder withNote(String note) { 
-      this.note = ((note == null || stringIsWhiteSpace(note))
-          ? "" : note);
-      return this;  
-    }
-    
+
     /**
      * Required method when using the Builder class to create a Contact object.
      * This method is called after the Builder method and any optional methods called.
@@ -242,8 +198,23 @@ public final class Contact implements Comparable<Contact> {
 		
   @Override
   public int compareTo(Contact contact) {
-    //Don't ignore case when ordering
-    return name.compareTo(contact.name);			
+	 if (getPhoneNumber().equals(contact.getPhoneNumber())) {
+		 if (name.equalsIgnoreCase(contact.getName())) {
+			 if (email.equalsIgnoreCase(contact.getEmail())) {
+			      if (getPostalAddress().equalsIgnoreCase(contact.getPostalAddress())) {
+			    	  return 0;
+			      } else {
+			    	  return getPostalAddress().compareToIgnoreCase(contact.getPostalAddress());
+			      }
+			 } else {
+				 return email.compareToIgnoreCase(contact.getEmail());
+			 }
+		 } else {
+			 return name.compareToIgnoreCase(contact.getName());
+		 }
+	 } else {
+		 return getPhoneNumber().compareTo(contact.getPhoneNumber());
+	 }
   }
   
   /**
@@ -265,10 +236,9 @@ public final class Contact implements Comparable<Contact> {
       return false;
     }
     Contact contact = (Contact)o;
-    return phoneNumber.getNumber().equals(contact.phoneNumber.getNumber()) && 
+    return getPhoneNumber().equals(contact.getPhoneNumber()) && 
     	name.equalsIgnoreCase(contact.name) && email.equalsIgnoreCase(contact.email) 
-    	&& getPostalAddress().equalsIgnoreCase(contact.postalAddress.toString())
-        && note.equals(contact.note);
+    	&& getPostalAddress().equalsIgnoreCase(contact.getPostalAddress());
   }
   
   /**
@@ -280,19 +250,13 @@ public final class Contact implements Comparable<Contact> {
 	
   @Override
   public int hashCode() {
-    int result = hashCode;
-    if (result == 0) {
-      result = 17;
-      result = ((name.isEmpty()) ? result : 31 * result + Integer.parseInt(name));
-      result = ((email.isEmpty()) ? result : 31 * result + Integer.parseInt(email));
-      String number = phoneNumber.getNumber();
-      result = ((number.isEmpty()) ? result : 31 * result + Integer.parseInt(number));
+      int result = 17;
+      result = ((name.isEmpty()) ? result : 31 * result + name.toLowerCase().hashCode());
+      result = ((email.isEmpty()) ? result : 31 * result + email.toLowerCase().hashCode());
+      result = ((getPhoneNumber().isEmpty()) ? result : 31 * result + getPhoneNumber().hashCode());
       String address = getPostalAddress();
-      result = ((address.isEmpty()) ? result : 31 * result + Integer.parseInt(address));
-      result = ((note.isEmpty()) ? result : 31 * result + Integer.parseInt(note));
-      hashCode = result;
-    }
-    return result;
+      result = ((address.isEmpty()) ? result : 31 * result + address.toLowerCase().hashCode()); 
+      return result;
   }
   
   /** 
@@ -303,8 +267,24 @@ public final class Contact implements Comparable<Contact> {
 	
   @Override
   public String toString() {
-    return name + "\n" + phoneNumber.toString() + "\n" + email + "\n" +
-        getPostalAddress() + "\n" + note + "\n";
+    StringBuilder stringBuilder = new StringBuilder();
+    if (!name.isEmpty()) {
+    	stringBuilder.append(name + "\n");
+    }
+    if (!getPhoneNumber().isEmpty()) {
+    	stringBuilder.append(getPhoneNumber() + "\n");
+    }
+    if (!email.isEmpty()) {
+    	stringBuilder.append(email + "\n");
+    }
+    if (!getPostalAddress().isEmpty()) {
+    	stringBuilder.append(getPostalAddress() + "\n");
+    }
+    if (!note.isEmpty()) {
+    	stringBuilder.append(note + "\n");
+    }
+    return stringBuilder.toString();
+
   }
   
   /**
@@ -316,16 +296,6 @@ public final class Contact implements Comparable<Contact> {
   
   public String getPhoneNumber() {
     return phoneNumber.toString();
-  }
-  
-  /**
-   * Returns the Contact's phone number, excluding any non-digit characters or 
-   * empty spaces. This method is used internally for comparing two phone numbers
-   * @return the Contact's phone number without additional characters
-   */
-  
-  String privateGetPhoneNumber() {
-    return phoneNumber.getNumber();	  
   }
   
   public String getName() {
@@ -419,36 +389,14 @@ public final class Contact implements Comparable<Contact> {
     private short countryCode; 
     private short areaCode;
     private int subscriberNumber; 
-    private String phoneNumber;
-   
+
     private PhoneNumber(String countryCode, String areaCode, String subscriberNumber) {
       String parsedCountryCode = parseStringToNumberString(countryCode);
       String parsedAreaCode = parseStringToNumberString(areaCode);
       String parsedSubscriberNumber = parseStringToNumberString(subscriberNumber);
-      phoneNumber = buildNumber(parsedCountryCode, parsedAreaCode, parsedSubscriberNumber);
       this.countryCode = Short.valueOf(parsedCountryCode);
       this.areaCode = Short.valueOf(parsedAreaCode);
-      this.subscriberNumber = Integer.parseInt(parsedSubscriberNumber);
-    }
-
-    private String buildNumber(String countryCode, String areaCode, 
-        String subscriberNumber) {
-      int length = countryCode.length() + areaCode.length() + subscriberNumber.length();
-      StringBuilder numberBuilder = new StringBuilder(length);
-      numberBuilder.append(countryCode);
-      numberBuilder.append(areaCode);
-      numberBuilder.append(subscriberNumber);
-      return numberBuilder.toString();
-    }
-	
-    /**
-     * Returns the Contact's phone number, excluding any non-digit characters or 
-     * empty spaces. This method is used internally for comparing two phone numbers
-     * @return the Contact's phone number without additional characters
-     */
-	
-    String getNumber() {
-      return phoneNumber;	
+      this.subscriberNumber = Integer.valueOf(parsedSubscriberNumber);
     }
 	
     /**
@@ -465,17 +413,7 @@ public final class Contact implements Comparable<Contact> {
       return countryCode + " " + areaCode + " " + subscriberNumber;
     }
   }
-  
-  /**
-   * Returns true if character is a digit between 0 and 9; returns false otherwise.
-   * @param op the character to be tested for inclusiveness in the digit range 0 to 9. 
-   * @return true if character is a digit between 0 and 9; returns false otherwise.
-   */
-  
-  static boolean isOperand(char op) {
-    return ((op >= '0') && (op <= '9'));
-  }
-  
+
   /**
    * Returns an alternative version of a given string, excluding any non-digit
    * characters or spaces. Used internally for short and int representations of
@@ -487,7 +425,7 @@ public final class Contact implements Comparable<Contact> {
   static String parseStringToNumberString(String string) {
     StringBuilder stringBuilder = new StringBuilder();
     for (char c: string.toCharArray()) {
-      if (isOperand(c)) {
+      if (Character.isDigit(c)) {
         stringBuilder.append(c);
       }
     }
