@@ -90,12 +90,14 @@ public class ConnectFourModel implements ConnectFourSubject {
     observers = new ArrayList<ConnectFourObserver>();
     gameGrid = new ConnectFourColor[NUM_ROWS][NUM_COLUMNS];
     player1 = builder.player1;
+    ConnectFourPlayerFactory playerFactory = new ConnectFourPlayerFactory();
+    
     if (player1.getPlayerType().equals(PlayerType.COMPUTER) && 
         builder.player2 == null) {
-      player2 = ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColor.RED);
+      player2 = playerFactory.createPlayer(PlayerType.HUMAN, ConnectFourColor.RED); //ConnectFourHumanPlayer.getPlayer(ConnectFourColor.RED);
     } else {
       player2 = ((builder.player2 == null) ? 
-          ConnectFourComputerPlayer.getComputerPlayer() 
+    	   playerFactory.createPlayer(PlayerType.COMPUTER, ConnectFourColor.BLACK)
           : builder.player2);
     }
 

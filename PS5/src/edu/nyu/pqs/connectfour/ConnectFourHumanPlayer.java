@@ -16,7 +16,7 @@ package edu.nyu.pqs.connectfour;
  * @see PlayerType
  * 
  */
-public class ConnectFourHumanPlayer extends ConnectFourPlayer {
+class ConnectFourHumanPlayer extends ConnectFourPlayer {
   private static final PlayerType type = PlayerType.HUMAN;
   private final ConnectFourColor color;
   private static ConnectFourPlayer player1;
@@ -36,7 +36,7 @@ public class ConnectFourHumanPlayer extends ConnectFourPlayer {
    * @param color the color of the player.
    * @return a ConnectFourPlayer object.
    */
-  public static ConnectFourPlayer getHumanPlayer(ConnectFourColor color) {
+  public static ConnectFourPlayer getPlayer(ConnectFourColor color) {
     if (player1 == null) {
       player1 = new ConnectFourHumanPlayer(color);
       return player1;

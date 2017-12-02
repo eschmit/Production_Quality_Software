@@ -13,17 +13,18 @@ import org.junit.Test;
 public class ConnectFourModelTest {
   private ConnectFourModel psuedoOnePlayerGame;
   private ConnectFourModel twoPlayerGame;
+  private ConnectFourPlayerFactory playerFactory = new ConnectFourPlayerFactory();
 
   @Before
   public void setUp() {
-    psuedoOnePlayerGame = new ConnectFourModel.Builder(
-        ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColor.RED)).
-        secondPlayer(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColor.BLACK)).build();
-    twoPlayerGame = new ConnectFourModel.Builder(
-        ConnectFourHumanPlayer.getHumanPlayer(ConnectFourColor.RED)).
-        secondPlayer(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColor.BLACK)).build();
+    psuedoOnePlayerGame = new ConnectFourModel.Builder(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.RED) )
+            .secondPlayer(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.BLACK)).build();
+    twoPlayerGame = new ConnectFourModel.Builder(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.RED) )
+            .secondPlayer(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.BLACK)).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -33,24 +34,25 @@ public class ConnectFourModelTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testConnectFour_nullSecondParameter() {
-    new ConnectFourModel.Builder(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColor.RED)).secondPlayer(null).build();
+    new ConnectFourModel.Builder(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.RED) )
+    .secondPlayer(null).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testConnectFour_sameColor() {
-    new ConnectFourModel.Builder(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColor.RED)).
-        secondPlayer(ConnectFourHumanPlayer.
-        getHumanPlayer(ConnectFourColor.RED)).build();
+    new ConnectFourModel.Builder(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.RED) ).
+        secondPlayer(playerFactory
+                .createPlayer(PlayerType.HUMAN, ConnectFourColor.RED) ).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testConnectFour_twoComputerPlayers() {
-    new ConnectFourModel.Builder(ConnectFourComputerPlayer.
-        getComputerPlayer()).
-        secondPlayer(ConnectFourComputerPlayer.
-        getComputerPlayer()).build();
+    new ConnectFourModel.Builder(playerFactory
+            .createPlayer(PlayerType.COMPUTER, ConnectFourColor.RED) ).
+        secondPlayer(playerFactory
+                .createPlayer(PlayerType.COMPUTER, ConnectFourColor.RED)).build();
   }
 
   @Test

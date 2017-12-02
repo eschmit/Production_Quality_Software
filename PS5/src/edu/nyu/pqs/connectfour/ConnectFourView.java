@@ -252,16 +252,17 @@ public class ConnectFourView implements ConnectFourObserver {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+      ConnectFourPlayerFactory playerFactory = new ConnectFourPlayerFactory();
       if (numPlayers == 2) {
-        connectFour = new ConnectFourModel.Builder(ConnectFourHumanPlayer.
-            getHumanPlayer(ConnectFourColor.RED)).
-            secondPlayer(ConnectFourHumanPlayer.
-            getHumanPlayer(ConnectFourColor.BLACK)).build();
+        connectFour = new ConnectFourModel.Builder(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.RED) )
+            .secondPlayer(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.BLACK)).build();
       } else {
-        connectFour = new ConnectFourModel.Builder(ConnectFourHumanPlayer.
-            getHumanPlayer(ConnectFourColor.RED))
-            .secondPlayer(ConnectFourComputerPlayer.
-            getComputerPlayer()).build(); 
+        connectFour = new ConnectFourModel.Builder(playerFactory
+            .createPlayer(PlayerType.HUMAN, ConnectFourColor.RED))
+            .secondPlayer(playerFactory
+            .createPlayer(PlayerType.COMPUTER, ConnectFourColor.BLACK)).build(); 
       }
       connectFour.registerObserver(ConnectFourView.this);
       display();

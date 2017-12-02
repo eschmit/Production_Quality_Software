@@ -8,8 +8,11 @@ public class ConnectFourComputerPlayerTest {
 
   @Test
   public void testComputerPlayerSingleton() {
-    ConnectFourPlayer compPlayer1 = ConnectFourComputerPlayer.getComputerPlayer();
-    ConnectFourPlayer compPlayer2 = ConnectFourComputerPlayer.getComputerPlayer();
+    ConnectFourPlayerFactory playerFactory = new ConnectFourPlayerFactory();
+    ConnectFourPlayer compPlayer1 = playerFactory
+            .createPlayer(PlayerType.COMPUTER, ConnectFourColor.BLACK);
+    ConnectFourPlayer compPlayer2 = playerFactory
+            .createPlayer(PlayerType.COMPUTER, ConnectFourColor.BLACK);
     assertSame(compPlayer1, compPlayer2);
   }
 }

@@ -22,4 +22,6 @@ public abstract class ConnectFourPlayer {
    * @return the PlayerType of the connect four player.
    */
   public abstract PlayerType getPlayerType();
+  
+ // protected abstract ConnectFourPlayer getPlayer(ConnectFourColor c);
 }
